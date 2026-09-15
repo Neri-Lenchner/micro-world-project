@@ -1,0 +1,9 @@
+{
+  "name": "@jb/rest",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1"
+  }
+}

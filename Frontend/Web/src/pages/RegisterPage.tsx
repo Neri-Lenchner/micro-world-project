@@ -1,0 +1,56 @@
+import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authApi, TOKEN_KEY } from "../api/authApi";
+
+export default function RegisterPage() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+    try {
+      const token = await authApi.register(email, password);
+      localStorage.setItem(TOKEN_KEY, token);
+      navigate("/");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="form-page">
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Email
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        {error && <p className="error">{error}</p>}
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Registering..." : "Register"}
+        </button>
+      </form>
+    </div>
+  );
+}

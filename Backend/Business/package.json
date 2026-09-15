@@ -1,0 +1,23 @@
+{
+  "name": "@jb/business",
+  "version": "1.0.0",
+  "description": "Business Microservice Skeleton",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon --exec ts-node src/app.ts --quiet"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@jb/rest": "workspace:*",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/mongoose": "^5.11.97"
+  }
+}

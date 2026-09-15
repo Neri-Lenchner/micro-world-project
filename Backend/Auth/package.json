@@ -1,0 +1,28 @@
+{
+  "name": "@jb/auth",
+  "version": "1.0.0",
+  "description": "Auth Microservice",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon --exec ts-node src/app.ts --quiet"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mongoose": "^5.11.97",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.2",
+    "@jb/rest": "workspace:*",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}

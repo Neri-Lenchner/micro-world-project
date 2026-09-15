@@ -1,0 +1,7 @@
+packages:
+  - "Backend/*"
+  - "Frontend/*"
+  - "Libraries/*"
+allowBuilds:
+  bcrypt: false
+  esbuild: true
