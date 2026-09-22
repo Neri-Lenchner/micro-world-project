@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/api/authapi.ts","./src/pages/homepage.tsx","./src/pages/loginpage.tsx","./src/pages/registerpage.tsx"],"version":"6.0.3"}
+{"root":["./src/app.tsx","./src/routing.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/api/authapi.ts","./src/pages/homepage.tsx","./src/pages/loginpage.tsx","./src/pages/registerpage.tsx"],"version":"6.0.3"}
