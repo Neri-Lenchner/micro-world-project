@@ -12,6 +12,15 @@ class AuthMiddleware {
         };
     }
 
+    // For routes that are public but behave differently for logged-in users:
+    // no token -> continue as a guest, valid token -> set req.user, invalid/expired token -> 401.
+    public optionalToken(secretKey: string) {
+        return (req: Request, res: Response, next: NextFunction) => {
+            if (req.headers.authorization) (req as any).user = this.decode(req, secretKey);
+            next();
+        };
+    }
+
     public verifyAdmin(secretKey: string) {
         return (req: Request, res: Response, next: NextFunction) => {
             const payload = this.decode(req, secretKey);

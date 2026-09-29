@@ -2,7 +2,7 @@ import express from "express";
 import proxy from "express-http-proxy";
 import { appConfig } from "./app-config";
 import { errorMiddleware } from "@nltech/rest";
-import {verifyToken} from "./middleware/verify-token";
+import {optionalToken, verifyToken} from "./middleware/verify-token";
 
 function forwardUserHeaders(proxyReqOpts: any, srcReq: any) {
     delete proxyReqOpts.headers["x-user-id"];
@@ -33,8 +33,9 @@ class App {
             proxyReqOptDecorator: forwardUserHeaders
         }));
 
-        server.use("/api/business", verifyToken, proxy(appConfig.businessServiceUrl, {
-            proxyReqPathResolver: request => "/api/business" + request.url,
+        // Browsing products is public; Catalog itself decides which routes need a logged-in user.
+        server.use("/api/products", optionalToken, proxy(appConfig.catalogServiceUrl, {
+            proxyReqPathResolver: request => "/api/products" + request.url,
             proxyReqOptDecorator: forwardUserHeaders
         }));
 
