@@ -1,5 +1,5 @@
 import {ResultSetHeader} from "mysql2";
-import {pool} from "./db";
+import {dal} from "./dal";
 import {UserRow} from "./user";
 import {secureService} from "./secure-service";
 import {ResourceNotFound, UnauthorizedError, ValidationError} from "@nltech/rest";
@@ -11,13 +11,13 @@ class UserService {
         if (!email) throw new ValidationError("Email is required");
         if (!password) throw new ValidationError("Password is required");
 
-        const [existingRows] = await pool.query<UserRow[]>("SELECT id FROM users WHERE email = ?", [email]);
+        const [existingRows] = await dal.pool.query<UserRow[]>("SELECT id FROM users WHERE email = ?", [email]);
         if (existingRows.length > 0) throw new ValidationError("Email already registered");
 
         const passwordHash = await secureService.hash(password);
 
         try {
-            const [result] = await pool.query<ResultSetHeader>(
+            const [result] = await dal.pool.query<ResultSetHeader>(
                 "INSERT INTO users (email, password_hash) VALUES (?, ?)",
                 [email, passwordHash]
             );
@@ -33,7 +33,7 @@ class UserService {
         if (!email) throw new ValidationError("Email is required");
         if (!password) throw new ValidationError("Password is required");
 
-        const [rows] = await pool.query<UserRow[]>("SELECT * FROM users WHERE email = ?", [email]);
+        const [rows] = await dal.pool.query<UserRow[]>("SELECT * FROM users WHERE email = ?", [email]);
         const userFromDB = rows[0];
         if (!userFromDB) throw new UnauthorizedError("Incorrect email or password");
 
@@ -54,7 +54,7 @@ class UserService {
     }
 
     private async getById(id: number): Promise<UserRow | undefined> {
-        const [rows] = await pool.query<UserRow[]>("SELECT * FROM users WHERE id = ?", [id]);
+        const [rows] = await dal.pool.query<UserRow[]>("SELECT * FROM users WHERE id = ?", [id]);
         return rows[0];
     }
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import {appConfig} from "./app-config";
-import {initDatabase} from "./db";
+import {dal} from "./dal";
 import {userController} from "./user-controller";
 import {errorMiddleware} from "@nltech/rest";
 
@@ -11,7 +11,7 @@ class App {
 
         //server.use(cors());
 
-        await initDatabase();
+        await dal.init();
 
         server.use(express.json());
         server.use(userController.router);
