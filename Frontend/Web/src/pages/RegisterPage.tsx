@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authApi, TOKEN_KEY } from "../api/authApi";
+import { authApi } from "../api/authApi";
+import { setToken } from "../auth/auth";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function RegisterPage() {
     setSubmitting(true);
     try {
       const token = await authApi.register(email, password);
-      localStorage.setItem(TOKEN_KEY, token);
+      setToken(token);
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");

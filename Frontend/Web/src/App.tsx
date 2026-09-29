@@ -1,27 +1,26 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Routing from "./Routing";
-import { TOKEN_KEY } from "./api/authApi";
-
-function isAuthenticated(): boolean {
-  return !!localStorage.getItem(TOKEN_KEY);
-}
+import { clearToken, useCurrentUser } from "./auth/auth";
 
 export default function App() {
   const navigate = useNavigate();
-  const authenticated = isAuthenticated();
+  const user = useCurrentUser();
 
   function logout() {
-    localStorage.removeItem(TOKEN_KEY);
+    clearToken();
     navigate("/login");
   }
 
   return (
     <div className="app">
       <nav className="nav">
-        <Link to="/">Home</Link>
-        {!authenticated && <Link to="/login">Login</Link>}
-        {!authenticated && <Link to="/register">Register</Link>}
-        {authenticated && (
+        <Link to="/" className="brand">MicroWorld</Link>
+        <NavLink to="/products">Browse</NavLink>
+        <span className="nav-spacer" />
+        {!user && <NavLink to="/login">Login</NavLink>}
+        {!user && <NavLink to="/register">Register</NavLink>}
+        {user && <span className="nav-user">{user.email}</span>}
+        {user && (
           <button className="link-button" onClick={logout}>
             Logout
           </button>

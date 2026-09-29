@@ -1,15 +1,41 @@
-import { TOKEN_KEY } from "../api/authApi";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { productsApi } from "../api/productsApi";
+import { useCurrentUser } from "../auth/auth";
+import { Product } from "../types/product";
+import ProductCard from "../components/ProductCard";
 
 export default function HomePage() {
-  const token = localStorage.getItem(TOKEN_KEY);
+  const user = useCurrentUser();
+  const [latest, setLatest] = useState<Product[]>([]);
+
+  useEffect(() => {
+    productsApi
+      .list({ sort: "newest", limit: 4 })
+      .then((data) => setLatest(data.items))
+      .catch(() => setLatest([]));
+  }, []);
 
   return (
-    <div className="form-page">
-      <h1>JB Web</h1>
-      {token ? (
-        <p>You are logged in.</p>
-      ) : (
-        <p>You are not logged in. Use Login or Register above.</p>
+    <div>
+      <section className="hero">
+        <h1>MicroWorld</h1>
+        <p>Buy and sell second-hand and new items.</p>
+        {!user && <p className="muted">Log in or register to start selling.</p>}
+        <div className="actions">
+          <Link to="/products" className="button">Browse products</Link>
+        </div>
+      </section>
+
+      {latest.length > 0 && (
+        <section>
+          <h2>Latest listings</h2>
+          <div className="product-grid">
+            {latest.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
       )}
     </div>
   );
