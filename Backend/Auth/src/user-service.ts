@@ -1,6 +1,6 @@
 import {IUserModel, UserModel} from "./user";
 import {secureService} from "./secure-service";
-import {ResourceNotFound, UnauthorizedError, ValidationError} from "@jb/rest";
+import {ResourceNotFound, UnauthorizedError, ValidationError} from "@nltech/rest";
 import bcrypt from "bcrypt";
 
 class UserService {

@@ -1,6 +1,6 @@
 import express from 'express';
 import * as mongoose from "mongoose";
-import {errorMiddleware} from "@jb/rest";
+import {errorMiddleware} from "@nltech/rest";
 import {appConfig} from "./app_config";
 
 class App {

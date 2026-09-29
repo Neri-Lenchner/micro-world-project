@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { UnauthorizedError } from "@jb/rest";
+import { UnauthorizedError } from "@nltech/rest";
 import {appConfig} from "../app-config";
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {

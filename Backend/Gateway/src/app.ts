@@ -1,7 +1,7 @@
 import express from "express";
 import proxy from "express-http-proxy";
 import { appConfig } from "./app-config";
-import { errorMiddleware } from "@jb/rest";
+import { errorMiddleware } from "@nltech/rest";
 import {verifyToken} from "./middleware/verify-token";
 
 class App {
@@ -9,7 +9,15 @@ class App {
         const server = express();
         server.use(express.json());
 
-        server.use("/api/auth", proxy(appConfig.authServiceUrl, {
+        server.use("/api/auth/register", proxy(appConfig.authServiceUrl, {
+            proxyReqPathResolver: request => "/api/auth/register" + request.url
+        }));
+
+        server.use("/api/auth/login", proxy(appConfig.authServiceUrl, {
+            proxyReqPathResolver: request => "/api/auth/login" + request.url
+        }));
+
+        server.use("/api/auth", verifyToken, proxy(appConfig.authServiceUrl, {
             proxyReqPathResolver: request => "/api/auth" + request.url
         }));
 

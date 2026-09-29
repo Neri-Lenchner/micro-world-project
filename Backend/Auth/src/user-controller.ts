@@ -1,7 +1,7 @@
 import express, {Request, Response, Router} from "express";
 import {UserModel} from "./user";
 import {userService} from "./user-service";
-import { StatusCode } from "@jb/rest"
+import { StatusCode } from "@nltech/rest"
 
 class UserController {
 

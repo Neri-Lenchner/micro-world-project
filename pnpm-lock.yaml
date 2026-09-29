@@ -219,7 +219,7 @@ importers:
 
   Backend/Auth:
     dependencies:
-      '@jb/rest':
+      '@nltech/rest':
         specifier: workspace:*
         version: link:../../Libraries/Rest
       '@types/bcrypt':
@@ -256,7 +256,7 @@ importers:
 
   Backend/Business:
     dependencies:
-      '@jb/rest':
+      '@nltech/rest':
         specifier: workspace:*
         version: link:../../Libraries/Rest
       dotenv:
@@ -278,7 +278,7 @@ importers:
 
   Backend/Gateway:
     dependencies:
-      '@jb/rest':
+      '@nltech/rest':
         specifier: workspace:*
         version: link:../../Libraries/Rest
       dotenv:

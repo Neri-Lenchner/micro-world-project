@@ -2,7 +2,7 @@ import express from 'express';
 import {appConfig} from "./app-config";
 import * as mongoose from "mongoose";
 import {userController} from "./user-controller";
-import {errorMiddleware} from "@jb/rest";
+import {errorMiddleware} from "@nltech/rest";
 
 class App {
 
