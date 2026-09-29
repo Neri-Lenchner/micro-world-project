@@ -1,7 +1,8 @@
 import express from 'express';
-import * as mongoose from "mongoose";
 import {errorMiddleware} from "@nltech/rest";
-import {appConfig} from "./app_config";
+import {appConfig} from "./app-config";
+import {dal} from "./dal";
+import {productController} from "./product-controller";
 
 class App {
 
@@ -10,12 +11,11 @@ class App {
 
         //server.use(cors());
 
-        await mongoose.connect(appConfig.mongodbConnectionString);
+        await dal.init();
 
         server.use(express.json());
-
-        // TODO: wire up your controllers here, e.g. server.use(myController.router);
-
+        server.use(productController.router);
+        server.use(errorMiddleware.routeNotFound);
         server.use(errorMiddleware.catchAll);
 
         const httpServer = server.listen(appConfig.port, () =>
