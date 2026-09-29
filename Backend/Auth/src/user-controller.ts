@@ -1,7 +1,8 @@
 import express, {Request, Response, Router} from "express";
 import {UserModel} from "./user";
 import {userService} from "./user-service";
-import { StatusCode } from "@nltech/rest"
+import { StatusCode, requireAuth } from "@nltech/rest"
+import {appConfig} from "./app-config";
 
 class UserController {
 
@@ -10,7 +11,7 @@ class UserController {
     constructor() {
        this.router.post("/api/auth/register/", this.register);
        this.router.post("/api/auth/login/", this.login);
-       this.router.get("/api/auth/:id", this.getSingleUser);
+       this.router.get("/api/auth/:id", requireAuth(appConfig.secretKey), this.getSingleUser);
     }
 
     public async register(request: Request, response: Response) {

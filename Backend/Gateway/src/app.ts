@@ -4,6 +4,15 @@ import { appConfig } from "./app-config";
 import { errorMiddleware } from "@nltech/rest";
 import {verifyToken} from "./middleware/verify-token";
 
+function forwardUserHeaders(proxyReqOpts: any, srcReq: any) {
+    const user = (srcReq as any).user;
+    if (user?.slimUser) {
+        proxyReqOpts.headers["x-user-id"] = user.slimUser._id;
+        proxyReqOpts.headers["x-user-email"] = user.slimUser.email;
+    }
+    return proxyReqOpts;
+}
+
 class App {
     public async start(): Promise<void> {
         const server = express();
@@ -18,11 +27,13 @@ class App {
         }));
 
         server.use("/api/auth", verifyToken, proxy(appConfig.authServiceUrl, {
-            proxyReqPathResolver: request => "/api/auth" + request.url
+            proxyReqPathResolver: request => "/api/auth" + request.url,
+            proxyReqOptDecorator: forwardUserHeaders
         }));
 
         server.use("/api/business", verifyToken, proxy(appConfig.businessServiceUrl, {
-            proxyReqPathResolver: request => "/api/business" + request.url
+            proxyReqPathResolver: request => "/api/business" + request.url,
+            proxyReqOptDecorator: forwardUserHeaders
         }));
 
         server.use(errorMiddleware.catchAll);
