@@ -14,7 +14,7 @@ class UserController {
     }
 
     public async register(request: Request, response: Response) {
-        const user = new UserModel(request.body);
+        const user = new UserModel({ email: request.body.email, password: request.body.password });
         const userFromDB = await userService.register(user);
         response.status(StatusCode.Created).json(userFromDB);
     }
