@@ -7,8 +7,8 @@ class UserService {
 
     async register(user: IUserModel): Promise<string> {
         const error = user.validateSync();
-        user.password = await secureService.hash(user.password!);
         if (error) throw new ValidationError(error.message);
+        user.password = await secureService.hash(user.password);
         const userFromDB = await user.save();
         return secureService.generateToken(userFromDB);
     }
