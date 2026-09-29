@@ -29,3 +29,9 @@ export class UnauthorizedError extends BaseClientError {
         super(StatusCode.Unauthorized, message);
     }
 }
+
+export class ForbiddenError extends BaseClientError {
+    constructor(message: string) {
+        super(StatusCode.Forbidden, message);
+    }
+}

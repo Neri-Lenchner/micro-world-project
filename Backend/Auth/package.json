@@ -14,10 +14,9 @@
     "@types/bcrypt": "^6.0.0",
     "@types/bcryptjs": "^3.0.0",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/mongoose": "^5.11.97",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.6.2",
+    "mysql2": "^3.11.5",
     "@nltech/rest": "workspace:*",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2"

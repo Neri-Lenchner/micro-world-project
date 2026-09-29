@@ -6,6 +6,10 @@ class ErrorMiddleware {
 
     public catchAll(err: any, request: Request, response: Response, next: NextFunction) {
         console.log(err)
+        if (err.name === "CastError") {
+            response.status(StatusCode.NotFound).json({error: `id ${err.value} not found`});
+            return;
+        }
         const status = err.status ?? StatusCode.ServerError;
         const message = err.message;
         response.status(status).json({error: message});

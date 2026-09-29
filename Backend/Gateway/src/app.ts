@@ -5,9 +5,11 @@ import { errorMiddleware } from "@nltech/rest";
 import {verifyToken} from "./middleware/verify-token";
 
 function forwardUserHeaders(proxyReqOpts: any, srcReq: any) {
+    delete proxyReqOpts.headers["x-user-id"];
+    delete proxyReqOpts.headers["x-user-email"];
     const user = (srcReq as any).user;
     if (user?.slimUser) {
-        proxyReqOpts.headers["x-user-id"] = user.slimUser._id;
+        proxyReqOpts.headers["x-user-id"] = user.slimUser.id;
         proxyReqOpts.headers["x-user-email"] = user.slimUser.email;
     }
     return proxyReqOpts;

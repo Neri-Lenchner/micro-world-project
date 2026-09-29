@@ -1,8 +1,7 @@
 import express, {Request, Response, Router} from "express";
-import {UserModel} from "./user";
 import {userService} from "./user-service";
-import { StatusCode, requireAuth } from "@nltech/rest"
-import {appConfig} from "./app-config";
+import { StatusCode } from "@nltech/rest"
+import {verifyToken} from "./middleware/verify-token";
 
 class UserController {
 
@@ -11,18 +10,16 @@ class UserController {
     constructor() {
        this.router.post("/api/auth/register/", this.register);
        this.router.post("/api/auth/login/", this.login);
-       this.router.get("/api/auth/:id", requireAuth(appConfig.secretKey), this.getSingleUser);
+       this.router.get("/api/auth/:id", verifyToken, this.getSingleUser);
     }
 
     public async register(request: Request, response: Response) {
-        const user = new UserModel({ email: request.body.email, password: request.body.password });
-        const userFromDB = await userService.register(user);
-        response.status(StatusCode.Created).json(userFromDB);
+        const token = await userService.register(request.body.email, request.body.password);
+        response.status(StatusCode.Created).json(token);
     }
 
     public async login(request: Request, response: Response) {
-        const user = new UserModel(request.body);
-        const token = await userService.login(user);
+        const token = await userService.login(request.body.email, request.body.password);
         response.json({token});
     }
 

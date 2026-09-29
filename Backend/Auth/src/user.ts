@@ -1,21 +1,9 @@
-import {Document, model, Schema, Types} from "mongoose";
+import {RowDataPacket} from "mysql2";
 
-export interface IUserModel extends Document {
-    _id: Types.ObjectId;
+export interface UserRow extends RowDataPacket {
+    id: number;
     email: string;
-    password: string;
+    password_hash: string;
+    created_at: Date;
+    updated_at: Date;
 }
-
-
-export const UserSchema = new Schema<IUserModel>({
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-    },
-    password: {
-        type: String,
-        required: [true, "Password is required"],
-    },
-});
-
-export const UserModel = model<IUserModel>("UserModel", UserSchema, "users");

@@ -1,6 +1,6 @@
 import express from 'express';
 import {appConfig} from "./app-config";
-import * as mongoose from "mongoose";
+import {initDatabase} from "./db";
 import {userController} from "./user-controller";
 import {errorMiddleware} from "@nltech/rest";
 
@@ -11,7 +11,7 @@ class App {
 
         //server.use(cors());
 
-        await mongoose.connect(appConfig.mongodbConnectionString);
+        await initDatabase();
 
         server.use(express.json());
         server.use(userController.router);
