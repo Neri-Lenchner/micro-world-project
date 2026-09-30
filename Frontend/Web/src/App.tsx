@@ -15,7 +15,9 @@ export default function App() {
   return (
     <div className="app">
       <nav className="nav">
-        <Link to="/" className="brand">MicroWorld</Link>
+        <Link to="/" className="brand" aria-label="MicroWorld home">
+          <img src="/logo.svg" alt="MicroWorld" height={28} />
+        </Link>
         <ul className="nav-links">
           <li><NavLink to="/products" end>Browse</NavLink></li>
           {user && (
