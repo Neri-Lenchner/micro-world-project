@@ -2,6 +2,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+}
+
+.pagination span {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pagination button {
+  min-height: 40px;
+  padding: var(--space-2) var(--space-5);
 }

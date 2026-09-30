@@ -16,18 +16,29 @@ export default function App() {
     <div className="app">
       <nav className="nav">
         <Link to="/" className="brand">MicroWorld</Link>
-        <NavLink to="/products" end>Browse</NavLink>
-        {user && <NavLink to="/sell">Sell</NavLink>}
-        {user && <NavLink to="/my-listings">My listings</NavLink>}
+        <ul className="nav-links">
+          <li><NavLink to="/products" end>Browse</NavLink></li>
+          {user && (
+            <li><NavLink to="/my-listings">My listings</NavLink></li>
+          )}
+        </ul>
         <span className="nav-spacer" />
-        {!user && <NavLink to="/login">Login</NavLink>}
-        {!user && <NavLink to="/register">Register</NavLink>}
-        {user && <span className="nav-user">{user.email}</span>}
-        {user && (
-          <button className="link-button" onClick={logout}>
-            Logout
-          </button>
-        )}
+        <div className="nav-account">
+          {user ? (
+            <>
+              <span className="nav-user">{user.email}</span>
+              <button className="link-button" onClick={logout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login">Sign in</NavLink>
+              <NavLink to="/register">Register</NavLink>
+            </>
+          )}
+          <Link to="/sell" className="button">Sell an item</Link>
+        </div>
       </nav>
       <Routing />
     </div>

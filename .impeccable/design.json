@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T00:00:00.000Z",
+  "title": "Design System: MicroWorld",
+  "extensions": {
+    "colorMeta": {
+      "warm-paper": { "role": "neutral", "displayName": "Warm Paper", "canonical": "#F6F4EF", "tonalRamp": ["#2D2D2C", "#5D5C5A", "#8C8B88", "#BBBAB6", "#F6F4EF", "#F7F5F1", "#F8F7F3", "#F9F8F5"] },
+      "warm-ink": { "role": "neutral", "displayName": "Warm Ink", "canonical": "#1A1A17", "tonalRamp": ["#0C0C0B", "#10100E", "#131311", "#161614", "#1A1A17", "#52524F", "#959592", "#D8D8D5"] },
+      "cobalt": { "role": "primary", "displayName": "Cobalt", "canonical": "#2340C8", "tonalRamp": ["#0E1226", "#131D4C", "#182872", "#1D3298", "#2340C8", "#596ED4", "#99A6E1", "#DADDEF"] },
+      "clay": { "role": "danger", "displayName": "Clay", "canonical": "#9A3412", "tonalRamp": ["#20100A", "#3C190C", "#59210E", "#762A10", "#9A3412", "#B2654B", "#CFA08F", "#ECDBD4"] },
+      "forest": { "role": "success", "displayName": "Forest", "canonical": "#1F6B3A", "tonalRamp": ["#0D1910", "#112C1A", "#163F24", "#1A532E", "#1F6B3A", "#568E69", "#97B9A1", "#D9E4DA"] },
+      "warm-graphite": { "role": "neutral-text", "displayName": "Warm Graphite", "canonical": "#5E5A50" },
+      "hairline": { "role": "border", "displayName": "Hairline", "canonical": "#DDD8CC" },
+      "hairline-strong": { "role": "border", "displayName": "Hairline Strong", "canonical": "#CFC9BB" },
+      "hairline-soft": { "role": "border", "displayName": "Hairline Soft", "canonical": "#EFEBE3" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page titles and section headlines. Bricolage Grotesque 700 only." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy, labels, controls. Geist 400/500/600." },
+      "label": { "displayName": "Label", "purpose": "Uppercase small-caps-weight captions: filter legends, the sell-form preview caption." },
+      "mono": { "displayName": "Mono", "purpose": "Prices, order/listing IDs, timestamps, service/event names only." }
+    },
+    "shadows": [],
+    "motion": [],
+    "breakpoints": [
+      { "name": "auth-stack", "value": "720px" },
+      { "name": "sell-stack", "value": "760px" },
+      { "name": "browse-stack", "value": "860px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The ordinary primary action (Publish, Sign in, Search). Ink fill.",
+      "html": "<button class=\"ds-btn-primary\">Publish</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 12px 24px; background: #1A1A17; color: #F6F4EF; border: 1px solid #1A1A17; border-radius: 999px; font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 16px; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease; } .ds-btn-primary:hover { background: #000000; border-color: #000000; } .ds-btn-primary:focus-visible { outline: 2px solid #2340C8; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; cursor: default; }"
+    },
+    {
+      "name": "Accent Button",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "The screen's single live/primary CTA (e.g. Buy now). Cobalt fill, never dimmed when disabled.",
+      "html": "<button class=\"ds-btn-accent\" disabled>Buy now (coming soon)</button>",
+      "css": ".ds-btn-accent { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 12px 24px; background: #2340C8; color: #F6F4EF; border: 1px solid #2340C8; border-radius: 999px; font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 16px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-accent:hover { background: #1A2F99; border-color: #1A2F99; } .ds-btn-accent:disabled { opacity: 1; cursor: default; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Paper-white fill with a hairline border. Cancel, Remove photo, Edit.",
+      "html": "<button class=\"ds-btn-secondary\">Cancel</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 12px 24px; background: #FFFFFF; color: #1A1A17; border: 1px solid #CFC9BB; border-radius: 999px; font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 16px; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-secondary:hover { background: #EFEBE3; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Standard text/number/select field.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search listings…\" />",
+      "css": ".ds-input { min-height: 44px; padding: 12px 16px; background: #FFFFFF; color: #1A1A17; border: 1px solid #CFC9BB; border-radius: 10px; font-family: 'Geist', system-ui, sans-serif; font-size: 16px; } .ds-input::placeholder { color: #5E5A50; } .ds-input:focus-visible { outline: 2px solid #2340C8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Pill",
+      "kind": "chip",
+      "refersTo": "pill-status-neutral",
+      "description": "Category/condition label. Always paired with text, never color alone.",
+      "html": "<span class=\"ds-pill\">Used</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; background: #EFEBE3; color: #5E5A50; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; font-weight: 500; }"
+    },
+    {
+      "name": "Segmented Chip (selected)",
+      "kind": "chip",
+      "refersTo": "chip-segmented",
+      "description": "Single-select condition filter / form control, selected state.",
+      "html": "<label class=\"ds-chip ds-chip--checked\">Used</label>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; padding: 8px 16px; border: 1px solid #CFC9BB; border-radius: 999px; font-family: 'Geist', system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #1A1A17; cursor: pointer; } .ds-chip--checked { background: #1A1A17; border-color: #1A1A17; color: #F6F4EF; }"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "Browse-grid listing card: image, condition badge, title, mono price, seller · category.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card-media\"><div class=\"ds-card-image\"></div><span class=\"ds-pill ds-card-badge\">Used</span></div><div class=\"ds-card-body\"><h3 class=\"ds-card-title\">Catan board game</h3><p class=\"ds-card-price\">₪300.00</p><p class=\"ds-card-meta\">demo@microworld.com · Other</p></div></a>",
+      "css": ".ds-card { display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DDD8CC; border-radius: 18px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color 0.15s ease, transform 0.15s ease; } .ds-card:hover { border-color: #CFC9BB; transform: translateY(-2px); } .ds-card-media { position: relative; } .ds-card-image { aspect-ratio: 3 / 2; background: repeating-linear-gradient(135deg, #ECE7DC, #ECE7DC 12px, #E5DFD2 12px, #E5DFD2 24px); } .ds-card-badge { position: absolute; top: 12px; left: 12px; background: #FFFFFF; color: #1A1A17; } .ds-card-body { padding: 16px 20px 20px; } .ds-card-title { margin: 0 0 8px; font-family: 'Geist', system-ui, sans-serif; font-size: 16px; font-weight: 600; } .ds-card-price { margin: 0 0 4px; font-family: 'Geist Mono', monospace; font-weight: 500; font-size: 16px; } .ds-card-meta { margin: 0; color: #5E5A50; font-size: 14px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Working Ledger",
+    "overview": "MicroWorld reads like a well-kept ledger for a marketplace that isn't shy about its own machinery: warm paper, near-black ink, and exactly one cobalt accent per screen, set in a display face with real editorial weight and a monospace register reserved for the numbers that matter — prices, order IDs, timestamps, the names of the services doing the work. The system is calm and dense where density earns its keep (a browse grid, a listings table), and generous where a decision is being made (checkout, a form). Nothing is decorative; every mark on the page is either content, a control, or evidence of the distributed system underneath. Rejected explicitly: gradient washes, emoji standing in for icons, colored left-border accent cards, glassmorphism, and default system sans (Inter/Roboto/Arial) as a display face.",
+    "keyCharacteristics": [
+      "Warm, flat, paper-and-ink surface language — no drop shadows, hairline borders instead",
+      "One saturated accent (cobalt) per screen, reserved for the single primary or live moment",
+      "Bricolage Grotesque display type carries the editorial voice; Geist Mono marks anything measurable",
+      "Pill radii on every actionable control; softer card radii on containers",
+      "Condition/category/status are always a labeled pill, never color alone"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Cobalt appears at most once per screen, reserved for that screen's single primary or live moment. A default submit button, a nav link, or a secondary action is never cobalt.", "section": "colors" },
+      { "name": "The Labeled Status Rule", "body": "Condition, category, and any future order/listing status is always rendered as a pill with a text label. Color never carries status alone.", "section": "colors" },
+      { "name": "The Mono-Means-Real Rule", "body": "Only measurable, machine-real values are set in Geist Mono: prices, IDs, dates, event/service names. Never used decoratively for \"technical\" flavor on prose.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces separate by a 1px hairline border and a background-color step, never by box-shadow. A shadow appearing anywhere in this system is a bug, not a variant.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do spend cobalt on exactly one element per screen — the screen's single primary or live action.",
+      "Do render condition/category/status as a labeled pill (paper-tint neutral by default), never as a bare color swatch.",
+      "Do set prices, IDs, timestamps, and service/event names in Geist Mono.",
+      "Do separate surfaces with a 1px hairline border and a background step, never a shadow.",
+      "Do keep every actionable control pill-shaped and at least 44px tall."
+    ],
+    "donts": [
+      "Don't use gradient text, glassmorphism, or a colored border-left accent on any card or list row.",
+      "Don't dim the accent button variant on :disabled — keep it fully saturated; the disabled state reads through cursor and copy instead.",
+      "Don't introduce a second saturated accent color on a screen that already has one.",
+      "Don't fabricate data the backing services don't yet provide (stock counts, watcher counts, live-listing pills, notification badges) — omit the affordance until the service exists, rather than faking it.",
+      "Don't use Inter, Roboto, or system-ui as a display face; Bricolage Grotesque is the display voice everywhere."
+    ]
+  }
+}

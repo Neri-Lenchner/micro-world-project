@@ -5,6 +5,7 @@ import { Paged, Product, ProductFilters } from "../types/product";
 import ProductCard from "../components/ProductCard";
 import FilterBar from "../components/FilterBar";
 import Pagination from "../components/Pagination";
+import "./ProductsPage.css";
 
 const PAGE_SIZE = 12;
 
@@ -66,8 +67,8 @@ export default function ProductsPage() {
   }
 
   return (
-    <div>
-      <h1>Browse</h1>
+    <div className="browse-layout">
+      <h1 className="browse-title">Browse</h1>
       <FilterBar
         key={queryKey}
         filters={filters}
@@ -76,30 +77,32 @@ export default function ProductsPage() {
         onClear={() => setSearchParams({})}
       />
 
-      {error && <p className="error">{error}</p>}
-      {loading && !result && <p className="muted">Loading…</p>}
+      <div className="browse-results">
+        {error && <p className="error">{error}</p>}
+        {loading && !result && <p className="muted">Loading…</p>}
 
-      {result && (
-        <>
-          <p className="muted">
-            {result.total} {result.total === 1 ? "item" : "items"} found
-            {loading && " · updating…"}
-          </p>
-          {result.items.length === 0 ? (
-            <div className="empty-state">
-              <p>No products match your search.</p>
-              <button className="secondary" onClick={() => setSearchParams({})}>Clear filters</button>
-            </div>
-          ) : (
-            <div className="product-grid">
-              {result.items.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-          <Pagination page={result.page} pages={result.pages} onChange={goToPage} />
-        </>
-      )}
+        {result && (
+          <>
+            <p className="muted browse-count">
+              {result.total} {result.total === 1 ? "item" : "items"} found
+              {loading && " · updating…"}
+            </p>
+            {result.items.length === 0 ? (
+              <div className="empty-state">
+                <p>No products match your search.</p>
+                <button className="secondary" onClick={() => setSearchParams({})}>Clear filters</button>
+              </div>
+            ) : (
+              <div className="product-grid">
+                {result.items.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+            <Pagination page={result.page} pages={result.pages} onChange={goToPage} />
+          </>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,44 +1,95 @@
-.radio-group {
-  display: flex;
-  gap: 1.5rem;
+.sell-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: var(--space-10);
+  align-items: start;
+}
+
+.segmented-group {
   border: none;
   padding: 0;
   margin: 0;
-  font-size: 0.9rem;
 }
 
-.radio-group legend {
+.segmented-group legend {
   padding: 0;
-  margin-bottom: 0.4rem;
-}
-
-.radio-group label {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.4rem;
-  cursor: pointer;
+  margin-bottom: var(--space-2);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .image-field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: var(--space-3);
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.image-field .actions {
-  margin-top: 0;
+.dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-input);
+  background: var(--line-soft);
+  cursor: pointer;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.dropzone:hover {
+  border-color: var(--muted);
+}
+
+.dropzone.has-image {
+  border-style: solid;
+  background: var(--surface);
+  padding: var(--space-3);
+}
+
+.dropzone-hint {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 28ch;
 }
 
 .image-preview {
   width: 100%;
-  max-height: 260px;
+  max-height: 240px;
   object-fit: contain;
-  background: #f3f4f6;
-  border-radius: 6px;
+  border-radius: var(--radius-input);
 }
 
-label.file-button {
-  display: inline-block;
-  font-size: 1rem;
+.sell-preview {
+  position: sticky;
+  top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sell-preview-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.sell-preview-card {
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .sell-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sell-preview {
+    position: static;
+    max-width: 300px;
+  }
 }

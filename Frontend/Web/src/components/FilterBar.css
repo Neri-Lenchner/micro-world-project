@@ -1,15 +1,117 @@
-form.filter-bar {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+.browse-filters {
+  display: contents;
+}
+
+.search-row {
+  grid-area: search;
+  display: flex;
+  gap: var(--space-3);
+  align-items: stretch;
 }
 
 .filter-search {
-  flex: 1 1 220px;
+  flex: 1;
+  font-size: 17px;
+  padding: var(--space-3) var(--space-5);
 }
 
-.filter-price {
-  width: 100px;
+.search-row select {
+  flex: 0 0 auto;
+  min-width: 180px;
+}
+
+.filter-sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-self: start;
+}
+
+.filter-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-group legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.filter-radio {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.filter-radio input {
+  min-height: 0;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  accent-color: var(--ink);
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filter-chip {
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.filter-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-chip.checked {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--ink-inverse);
+}
+
+.filter-price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.filter-price-row input {
+  width: 0;
+  flex: 1;
+}
+
+.filter-price-sep {
+  color: var(--muted);
+}
+
+.filter-clear {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  font-size: 14px;
 }

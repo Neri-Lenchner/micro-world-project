@@ -20,18 +20,21 @@ export default function HomePage() {
   return (
     <div>
       <section className="hero">
-        <h1>MicroWorld</h1>
-        <p>Buy and sell second-hand and new items.</p>
-        {!user && <p className="muted">Log in or register to start selling.</p>}
+        <h1>Buy and sell, and watch it happen</h1>
+        <p>A marketplace built to make its own architecture visible — every order moves through the services that own it, in real time.</p>
+        {!user && <p className="muted">Sign in or create an account to start selling.</p>}
         <div className="actions">
-          <Link to="/products" className="button">Browse products</Link>
+          <Link to="/products" className="button">Browse listings</Link>
           <Link to="/sell" className="button secondary">Sell an item</Link>
         </div>
       </section>
 
       {latest.length > 0 && (
         <section>
-          <h2>Latest listings</h2>
+          <div className="latest-heading">
+            <h2>Latest listings</h2>
+            <Link to="/products" className="see-all-link">See all →</Link>
+          </div>
           <div className="product-grid">
             {latest.map((product) => (
               <ProductCard key={product.id} product={product} />

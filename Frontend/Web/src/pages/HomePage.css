@@ -1,11 +1,60 @@
 .hero {
-  background: #fff;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: var(--ink);
+  color: var(--ink-inverse);
+  border-radius: var(--radius-card);
+  padding: var(--space-12) var(--space-10);
+  margin-bottom: var(--space-10);
+}
+
+.hero h1 {
+  color: var(--ink-inverse);
+  max-width: 14ch;
 }
 
 .hero p {
-  margin: 0.25rem 0;
+  margin: 0 0 var(--space-2);
+  max-width: 48ch;
+  color: #d8d4c8;
+  font-size: 17px;
+}
+
+.hero .muted {
+  color: #a8a396;
+}
+
+.hero .actions {
+  margin-top: var(--space-6);
+}
+
+.hero .button.secondary {
+  background: transparent;
+  color: var(--ink-inverse);
+  border-color: #4a4a44;
+}
+
+.hero .button.secondary:hover {
+  background: #262622;
+  border-color: #5a5a52;
+}
+
+.latest-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.latest-heading h2 {
+  margin: 0;
+}
+
+.see-all-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.see-all-link:hover {
+  color: var(--ink);
 }

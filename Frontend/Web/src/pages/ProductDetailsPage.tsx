@@ -85,7 +85,7 @@ export default function ProductDetailsPage() {
             </div>
           ) : (
             <div className="actions">
-              <button disabled title="Buying is coming in the Orders step">Buy now (coming soon)</button>
+              <button className="accent" disabled title="Buying is coming in the Orders step">Buy now (coming soon)</button>
             </div>
           )}
         </div>

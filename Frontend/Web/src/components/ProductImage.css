@@ -3,13 +3,21 @@
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  background: #e5e7eb;
+  background: var(--placeholder-a);
 }
 
 .product-image.placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af;
-  font-size: 0.9rem;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--placeholder-a),
+    var(--placeholder-a) 12px,
+    var(--placeholder-b) 12px,
+    var(--placeholder-b) 24px
+  );
 }

@@ -1,0 +1,41 @@
+.browse-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-areas:
+    "title title"
+    "search search"
+    "sidebar results";
+  column-gap: var(--space-8);
+  row-gap: var(--space-6);
+}
+
+.browse-title {
+  grid-area: title;
+  margin: 0;
+}
+
+.browse-results {
+  grid-area: results;
+  min-width: 0;
+}
+
+.browse-count {
+  margin-bottom: var(--space-5);
+}
+
+@media (max-width: 860px) {
+  .browse-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "search"
+      "sidebar"
+      "results";
+  }
+
+  .filter-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+}

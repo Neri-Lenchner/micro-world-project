@@ -40,7 +40,7 @@ export default function EditProductPage() {
   }
 
   return (
-    <div className="form-page">
+    <div className="form-page wide">
       <h1>Edit item</h1>
       <ProductForm
         initial={product}

@@ -6,7 +6,7 @@ export default function SellPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="form-page">
+    <div className="form-page wide">
       <h1>Sell an item</h1>
       <ProductForm
         submitLabel="Publish"

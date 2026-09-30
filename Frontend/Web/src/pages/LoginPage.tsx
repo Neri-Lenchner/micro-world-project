@@ -1,7 +1,8 @@
 import { FormEvent, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { authApi } from "../api/authApi";
 import { getReturnTo, setToken } from "../auth/auth";
+import AuthLayout from "../components/AuthLayout";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -28,8 +29,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="form-page">
-      <h1>Login</h1>
+    <AuthLayout active="login" returnTo={returnTo} title="Sign in">
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -51,12 +51,9 @@ export default function LoginPage() {
         </label>
         {error && <p className="error">{error}</p>}
         <button type="submit" disabled={submitting}>
-          {submitting ? "Logging in..." : "Login"}
+          {submitting ? "Signing in…" : "Sign in"}
         </button>
       </form>
-      <p className="muted">
-        No account yet? <Link to={`/register?returnTo=${encodeURIComponent(returnTo)}`}>Register</Link>
-      </p>
-    </div>
+    </AuthLayout>
   );
 }
