@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { CONDITIONS, ProductFilters } from "../types/product";
 import { capitalize } from "../utils/format";
+import "./FilterBar.css";
 
 interface Props {
   filters: ProductFilters;

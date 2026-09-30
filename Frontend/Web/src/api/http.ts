@@ -24,13 +24,15 @@ interface RequestOptions {
 export async function http<T>(url: string, options: RequestOptions = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {};
-  if (options.body !== undefined) headers["Content-Type"] = "application/json";
+  // FormData (file uploads) is sent as-is: the browser sets the multipart Content-Type itself.
+  const isFormData = options.body instanceof FormData;
+  if (options.body !== undefined && !isFormData) headers["Content-Type"] = "application/json";
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const response = await fetch(url, {
     method: options.method ?? "GET",
     headers,
-    body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+    body: isFormData ? (options.body as FormData) : options.body !== undefined ? JSON.stringify(options.body) : undefined,
   });
 
   if (!response.ok) {

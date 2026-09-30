@@ -35,6 +35,7 @@ class App {
 
         // Browsing products is public; Catalog itself decides which routes need a logged-in user.
         server.use("/api/products", optionalToken, proxy(appConfig.catalogServiceUrl, {
+            limit: "10mb", // Default is 1mb, too small for photo uploads (Catalog itself allows up to 5mb per image).
             proxyReqPathResolver: request => "/api/products" + request.url,
             proxyReqOptDecorator: forwardUserHeaders
         }));

@@ -3,6 +3,7 @@ import {StatusCode} from "@nltech/rest";
 import {productService, ProductFilters} from "./product-service";
 import {CATEGORIES} from "./product";
 import {getCurrentUser, requireUser} from "./middleware/current-user";
+import {uploadImageService} from "./upload-image-service";
 
 function queryString(value: unknown): string | undefined {
     return typeof value === "string" && value.trim() ? value.trim() : undefined;
@@ -25,8 +26,9 @@ class ProductController {
         this.router.get("/api/products/categories", this.categories);
         this.router.get("/api/products/mine", requireUser, this.mine);
         this.router.get("/api/products/:id", this.getOne);
-        this.router.post("/api/products", requireUser, this.create);
-        this.router.put("/api/products/:id", requireUser, this.update);
+        // Create/update accept multipart/form-data with an optional "image" file (or plain JSON without one).
+        this.router.post("/api/products", requireUser, uploadImageService.single("image"), this.create);
+        this.router.put("/api/products/:id", requireUser, uploadImageService.single("image"), this.update);
         this.router.delete("/api/products/:id", requireUser, this.remove);
     }
 
@@ -58,12 +60,12 @@ class ProductController {
     }
 
     public async create(request: Request, response: Response) {
-        const product = await productService.create(request.body, getCurrentUser(request)!);
+        const product = await productService.create(request.body, getCurrentUser(request)!, request.file);
         response.status(StatusCode.Created).json(product);
     }
 
     public async update(request: Request, response: Response) {
-        const product = await productService.update(request.params.id as string, request.body, getCurrentUser(request)!);
+        const product = await productService.update(request.params.id as string, request.body, getCurrentUser(request)!, request.file);
         response.json(product);
     }
 

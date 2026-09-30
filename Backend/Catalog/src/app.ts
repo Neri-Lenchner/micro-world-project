@@ -3,6 +3,7 @@ import {errorMiddleware} from "@nltech/rest";
 import {appConfig} from "./app-config";
 import {dal} from "./dal";
 import {productController} from "./product-controller";
+import {IMAGES_URL_PREFIX, UPLOADS_DIR} from "./upload-image-service";
 
 class App {
 
@@ -14,6 +15,9 @@ class App {
         await dal.init();
 
         server.use(express.json());
+        // Uploaded product photos. Registered before the router so /images/... isn't treated as a product id.
+        // A missing image gets a plain 404 (without fallthrough: false, which would leak the server's folder path).
+        server.use(IMAGES_URL_PREFIX, express.static(UPLOADS_DIR), errorMiddleware.routeNotFound);
         server.use(productController.router);
         server.use(errorMiddleware.routeNotFound);
         server.use(errorMiddleware.catchAll);

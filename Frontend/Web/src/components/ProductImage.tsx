@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./ProductImage.css";
 
 interface Props {
   src: string | null;

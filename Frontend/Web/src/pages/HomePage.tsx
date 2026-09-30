@@ -4,6 +4,7 @@ import { productsApi } from "../api/productsApi";
 import { useCurrentUser } from "../auth/auth";
 import { Product } from "../types/product";
 import ProductCard from "../components/ProductCard";
+import "./HomePage.css";
 
 export default function HomePage() {
   const user = useCurrentUser();
@@ -24,6 +25,7 @@ export default function HomePage() {
         {!user && <p className="muted">Log in or register to start selling.</p>}
         <div className="actions">
           <Link to="/products" className="button">Browse products</Link>
+          <Link to="/sell" className="button secondary">Sell an item</Link>
         </div>
       </section>
 

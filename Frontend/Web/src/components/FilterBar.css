@@ -1,0 +1,15 @@
+form.filter-bar {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-search {
+  flex: 1 1 220px;
+}
+
+.filter-price {
+  width: 100px;
+}

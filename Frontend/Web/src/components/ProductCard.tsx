@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Product } from "../types/product";
 import { capitalize, formatPrice } from "../utils/format";
 import ProductImage from "./ProductImage";
+import "./ProductCard.css";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (

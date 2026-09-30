@@ -3,6 +3,7 @@ import {ForbiddenError, ResourceNotFound, ValidationError} from "@nltech/rest";
 import {dal} from "./dal";
 import {CATEGORIES, CONDITIONS, Category, Condition, Product, ProductInput, ProductRow, toProduct} from "./product";
 import {CurrentUser} from "./middleware/current-user";
+import {uploadImageService} from "./upload-image-service";
 
 export interface ProductFilters {
     search?: string;
@@ -93,35 +94,51 @@ class ProductService {
         return rows.map(toProduct);
     }
 
-    public async create(body: any, user: CurrentUser): Promise<Product> {
-        const input = this.validate(body);
-        const [result] = await dal.pool.query<ResultSetHeader>(
-            `INSERT INTO products (title, description, price, category, \`condition\`, image_url, seller_id, seller_email)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [input.title, input.description, input.price, input.category, input.condition, input.imageUrl, user.id, user.email]
-        );
-        return toProduct((await this.findRow(result.insertId))!);
+    // `file` is the uploaded photo (if any). It replaces body.imageUrl.
+    public async create(body: any, user: CurrentUser, file?: Express.Multer.File): Promise<Product> {
+        try {
+            const input = this.validate(body, file);
+            const [result] = await dal.pool.query<ResultSetHeader>(
+                `INSERT INTO products (title, description, price, category, \`condition\`, image_url, seller_id, seller_email)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [input.title, input.description, input.price, input.category, input.condition, input.imageUrl, user.id, user.email]
+            );
+            return toProduct((await this.findRow(result.insertId))!);
+        } catch (err) {
+            if (file) await uploadImageService.deleteImage(uploadImageService.toImageUrl(file));
+            throw err;
+        }
     }
 
-    public async update(id: string, body: any, user: CurrentUser): Promise<Product> {
-        const numericId = this.parseId(id);
-        await this.getOwnedRow(numericId, id, user);
-        const input = this.validate(body);
-        await dal.pool.query(
-            `UPDATE products SET title = ?, description = ?, price = ?, category = ?, \`condition\` = ?, image_url = ?
-             WHERE id = ?`,
-            [input.title, input.description, input.price, input.category, input.condition, input.imageUrl, numericId]
-        );
-        return toProduct((await this.findRow(numericId))!);
+    // body.imageUrl is the image to keep (the current one), or empty to remove it; a new `file` replaces it.
+    public async update(id: string, body: any, user: CurrentUser, file?: Express.Multer.File): Promise<Product> {
+        let input: ProductInput;
+        let oldImageUrl: string | null;
+        try {
+            const numericId = this.parseId(id);
+            oldImageUrl = (await this.getOwnedRow(numericId, id, user)).image_url;
+            input = this.validate(body, file);
+            await dal.pool.query(
+                `UPDATE products SET title = ?, description = ?, price = ?, category = ?, \`condition\` = ?, image_url = ?
+                 WHERE id = ?`,
+                [input.title, input.description, input.price, input.category, input.condition, input.imageUrl, numericId]
+            );
+        } catch (err) {
+            if (file) await uploadImageService.deleteImage(uploadImageService.toImageUrl(file));
+            throw err;
+        }
+        if (oldImageUrl !== input.imageUrl) await uploadImageService.deleteImage(oldImageUrl);
+        return this.getById(id);
     }
 
     public async remove(id: string, user: CurrentUser): Promise<void> {
         const numericId = this.parseId(id);
-        await this.getOwnedRow(numericId, id, user);
+        const row = await this.getOwnedRow(numericId, id, user);
         await dal.pool.query("DELETE FROM products WHERE id = ?", [numericId]);
+        await uploadImageService.deleteImage(row.image_url);
     }
 
-    private validate(body: any): ProductInput {
+    private validate(body: any, file?: Express.Multer.File): ProductInput {
         const title = typeof body?.title === "string" ? body.title.trim() : "";
         if (!title) throw new ValidationError("Title is required");
         if (title.length > 100) throw new ValidationError("Title must be at most 100 characters");
@@ -138,9 +155,13 @@ class ProductService {
         if (!CONDITIONS.includes(body?.condition)) throw new ValidationError("Condition must be one of: " + CONDITIONS.join(", "));
 
         let imageUrl: string | null = null;
-        if (typeof body?.imageUrl === "string" && body.imageUrl.trim()) {
+        if (file) {
+            imageUrl = uploadImageService.toImageUrl(file);
+        } else if (typeof body?.imageUrl === "string" && body.imageUrl.trim()) {
             imageUrl = body.imageUrl.trim();
-            if (!/^https?:\/\//i.test(imageUrl!)) throw new ValidationError("Image URL must start with http:// or https://");
+            const isLink = /^https?:\/\//i.test(imageUrl!);
+            const isOurUpload = /^\/api\/products\/images\/[\w-]+\.(jpg|png|webp|gif)$/.test(imageUrl!);
+            if (!isLink && !isOurUpload) throw new ValidationError("Image URL must start with http:// or https://");
             if (imageUrl!.length > 500) throw new ValidationError("Image URL is too long");
         }
 

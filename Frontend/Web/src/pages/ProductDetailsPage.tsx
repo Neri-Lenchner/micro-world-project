@@ -6,6 +6,7 @@ import { useCurrentUser } from "../auth/auth";
 import { Product } from "../types/product";
 import { capitalize, formatDate, formatPrice } from "../utils/format";
 import ProductImage from "../components/ProductImage";
+import "./ProductDetailsPage.css";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
@@ -77,6 +78,7 @@ export default function ProductDetailsPage() {
 
           {isOwner ? (
             <div className="actions">
+              <Link to={`/products/${product.id}/edit`} className="button secondary">Edit</Link>
               <button className="danger" onClick={handleDelete} disabled={deleting}>
                 {deleting ? "Deleting…" : "Delete"}
               </button>

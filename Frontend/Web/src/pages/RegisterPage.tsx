@@ -1,10 +1,12 @@
 import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { authApi } from "../api/authApi";
-import { setToken } from "../auth/auth";
+import { getReturnTo, setToken } from "../auth/auth";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const returnTo = getReturnTo(searchParams);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +19,7 @@ export default function RegisterPage() {
     try {
       const token = await authApi.register(email, password);
       setToken(token);
-      navigate("/");
+      navigate(returnTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
@@ -52,6 +54,9 @@ export default function RegisterPage() {
           {submitting ? "Registering..." : "Register"}
         </button>
       </form>
+      <p className="muted">
+        Already have an account? <Link to={`/login?returnTo=${encodeURIComponent(returnTo)}`}>Login</Link>
+      </p>
     </div>
   );
 }

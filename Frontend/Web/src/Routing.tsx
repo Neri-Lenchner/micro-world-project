@@ -4,6 +4,10 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import SellPage from "./pages/SellPage";
+import EditProductPage from "./pages/EditProductPage";
+import MyListingsPage from "./pages/MyListingsPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function Routing() {
   return (
@@ -13,6 +17,9 @@ export default function Routing() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/products/:id" element={<ProductDetailsPage />} />
+      <Route path="/products/:id/edit" element={<ProtectedRoute><EditProductPage /></ProtectedRoute>} />
+      <Route path="/sell" element={<ProtectedRoute><SellPage /></ProtectedRoute>} />
+      <Route path="/my-listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -59,6 +59,13 @@ export function getCurrentUser(): CurrentUser | null {
   return token ? decodePayload(token)?.slimUser ?? null : null;
 }
 
+// Where to go after login/register (?returnTo=/sell). Only local paths are allowed,
+// so a link like /login?returnTo=https://evil.com can't send users to another site.
+export function getReturnTo(params: URLSearchParams): string {
+  const returnTo = params.get("returnTo");
+  return returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
+}
+
 function subscribe(listener: () => void) {
   listeners.add(listener);
   // Also react to login/logout in another browser tab.
