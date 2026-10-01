@@ -1,0 +1,12 @@
+**/node_modules
+**/build
+**/dist
+**/uploads
+**/*.tsbuildinfo
+.git
+.idea
+.env
+**/.env
+microworld-logo
+docs-md
+*.md

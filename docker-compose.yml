@@ -1,0 +1,95 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      CATALOG_DB_PASSWORD: ${CATALOG_DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./infrastructure/mysql/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [microworld]
+
+  auth:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.backend
+      args:
+        SERVICE_DIR: Backend/Auth
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      MYSQL_HOST: mysql
+      MYSQL_USER: nltech_auth
+      MYSQL_PASSWORD: ${AUTH_DB_PASSWORD}
+      MYSQL_DATABASE: micro_world_users_db
+      DB_TIMEZONE: "+00:00"
+      SECRET_KEY: ${JWT_SECRET_KEY}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks: [microworld]
+
+  catalog:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.backend
+      args:
+        SERVICE_DIR: Backend/Catalog
+    restart: unless-stopped
+    environment:
+      PORT: 4001
+      MYSQL_HOST: mysql
+      MYSQL_USER: nltech_catalog
+      MYSQL_PASSWORD: ${CATALOG_DB_PASSWORD}
+      MYSQL_DATABASE: micro_world_catalog_db
+      DB_TIMEZONE: "+00:00"
+    volumes:
+      - catalog_uploads:/repo/Backend/Catalog/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks: [microworld]
+
+  gateway:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.backend
+      args:
+        SERVICE_DIR: Backend/Gateway
+    restart: unless-stopped
+    environment:
+      PORT: 80
+      AUTH_SERVICE_URL: http://auth:4000
+      CATALOG_SERVICE_URL: http://catalog:4001
+      SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - "8081:80"
+    depends_on:
+      - auth
+      - catalog
+    networks: [microworld]
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - gateway
+    networks: [microworld]
+
+volumes:
+  mysql_data:
+  catalog_uploads:
+
+networks:
+  microworld:
