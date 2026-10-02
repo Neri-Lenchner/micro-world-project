@@ -46,6 +46,12 @@ class App {
             proxyReqOptDecorator: forwardUserHeaders
         }));
 
+        // Saving/viewing a watchlist both require being logged in.
+        server.use("/api/watchlist", verifyToken, proxy(appConfig.watchlistServiceUrl, {
+            proxyReqPathResolver: request => "/api/watchlist" + request.url,
+            proxyReqOptDecorator: forwardUserHeaders
+        }));
+
         server.use(errorMiddleware.catchAll);
 
         server.listen(appConfig.port, () =>
