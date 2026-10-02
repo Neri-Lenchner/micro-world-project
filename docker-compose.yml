@@ -26,7 +26,7 @@ services:
     environment:
       PORT: 4000
       MYSQL_HOST: mysql
-      MYSQL_USER: nltech_auth
+      MYSQL_USER: micro_world_auth
       MYSQL_PASSWORD: ${AUTH_DB_PASSWORD}
       MYSQL_DATABASE: micro_world_users_db
       DB_TIMEZONE: "+00:00"
@@ -46,7 +46,7 @@ services:
     environment:
       PORT: 4001
       MYSQL_HOST: mysql
-      MYSQL_USER: nltech_catalog
+      MYSQL_USER: micro_world_catalog
       MYSQL_PASSWORD: ${CATALOG_DB_PASSWORD}
       MYSQL_DATABASE: micro_world_catalog_db
       DB_TIMEZONE: "+00:00"
