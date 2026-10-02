@@ -77,6 +77,7 @@
 .nav-account .button {
   padding: var(--space-2) var(--space-5);
   min-height: 40px;
+  color: var(--ink-inverse);
 }
 
 .nav-account .link-button {
