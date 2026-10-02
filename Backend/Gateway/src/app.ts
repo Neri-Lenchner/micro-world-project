@@ -40,6 +40,12 @@ class App {
             proxyReqOptDecorator: forwardUserHeaders
         }));
 
+        // Buying and viewing orders both require being logged in.
+        server.use("/api/orders", verifyToken, proxy(appConfig.orderServiceUrl, {
+            proxyReqPathResolver: request => "/api/orders" + request.url,
+            proxyReqOptDecorator: forwardUserHeaders
+        }));
+
         server.use(errorMiddleware.catchAll);
 
         server.listen(appConfig.port, () =>
