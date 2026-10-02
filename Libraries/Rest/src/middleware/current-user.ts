@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {UnauthorizedError} from "@nltech/rest";
+import {UnauthorizedError} from "../client-error";
 
 export interface CurrentUser {
     id: number;
@@ -7,7 +7,7 @@ export interface CurrentUser {
 }
 
 // The Gateway verifies the JWT and forwards who the user is in these headers.
-// Catalog trusts them, so it must only be reachable through the Gateway.
+// A service trusting these must only be reachable through the Gateway.
 export function getCurrentUser(req: Request): CurrentUser | undefined {
     const id = Number(req.headers["x-user-id"]);
     const email = req.headers["x-user-email"];

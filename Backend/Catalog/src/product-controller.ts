@@ -1,8 +1,7 @@
 import express, {Request, Response, Router} from "express";
-import {StatusCode} from "@nltech/rest";
+import {StatusCode, getCurrentUser, requireUser} from "@nltech/rest";
 import {productService, ProductFilters} from "./product-service";
 import {CATEGORIES} from "./product";
-import {getCurrentUser, requireUser} from "./middleware/current-user";
 import {uploadImageService} from "./upload-image-service";
 
 function queryString(value: unknown): string | undefined {

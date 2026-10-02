@@ -1,8 +1,7 @@
 import {ResultSetHeader, RowDataPacket} from "mysql2";
-import {ForbiddenError, ResourceNotFound, ValidationError} from "@nltech/rest";
+import {ForbiddenError, ResourceNotFound, ValidationError, CurrentUser} from "@nltech/rest";
 import {dal} from "./dal";
 import {CATEGORIES, CONDITIONS, Category, Condition, Product, ProductInput, ProductRow, toProduct} from "./product";
-import {CurrentUser} from "./middleware/current-user";
 import {uploadImageService} from "./upload-image-service";
 
 export interface ProductFilters {

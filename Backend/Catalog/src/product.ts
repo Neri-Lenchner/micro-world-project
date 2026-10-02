@@ -5,6 +5,7 @@ export const CONDITIONS = ["new", "used"] as const;
 
 export type Category = typeof CATEGORIES[number];
 export type Condition = typeof CONDITIONS[number];
+export type ProductStatus = "available" | "sold";
 
 export interface ProductRow extends RowDataPacket {
     id: number;
@@ -16,6 +17,7 @@ export interface ProductRow extends RowDataPacket {
     image_url: string | null;
     seller_id: number;
     seller_email: string;
+    status: ProductStatus;
     created_at: Date;
     updated_at: Date;
 }
@@ -41,6 +43,7 @@ export interface Product {
     imageUrl: string | null;
     sellerId: number;
     sellerEmail: string;
+    status: ProductStatus;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -56,6 +59,7 @@ export function toProduct(row: ProductRow): Product {
         imageUrl: row.image_url,
         sellerId: row.seller_id,
         sellerEmail: row.seller_email,
+        status: row.status,
         createdAt: row.created_at,
         updatedAt: row.updated_at,
     };

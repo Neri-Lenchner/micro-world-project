@@ -10,6 +10,7 @@ class AppConfig {
     public readonly mysqlPassword: string = process.env.MYSQL_PASSWORD as string;
     public readonly mysqlDatabase: string = process.env.MYSQL_DATABASE as string;
     public readonly dbTimezone: string = process.env.DB_TIMEZONE as string;
+    public readonly rabbitmqUrl: string = process.env.RABBITMQ_URL as string;
 }
 
 export const appConfig = new AppConfig();

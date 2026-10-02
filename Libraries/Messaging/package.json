@@ -1,0 +1,15 @@
+{
+  "name": "@nltech/messaging",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.5"
+  }
+}

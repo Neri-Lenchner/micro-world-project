@@ -1,8 +1,10 @@
 import express from 'express';
 import {errorMiddleware} from "@nltech/rest";
+import {messaging} from "@nltech/messaging";
 import {appConfig} from "./app-config";
 import {dal} from "./dal";
 import {productController} from "./product-controller";
+import {startOrderEventsConsumer} from "./order-events-consumer";
 import {IMAGES_URL_PREFIX, UPLOADS_DIR} from "./upload-image-service";
 
 class App {
@@ -13,6 +15,8 @@ class App {
         //server.use(cors());
 
         await dal.init();
+        await messaging.connect(appConfig.rabbitmqUrl);
+        await startOrderEventsConsumer();
 
         server.use(express.json());
         // Uploaded product photos. Registered before the router so /images/... isn't treated as a product id.
