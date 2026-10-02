@@ -31,6 +31,13 @@
   font-weight: 600;
 }
 
+.condition-badge.status-sold {
+  left: auto;
+  right: var(--space-3);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
 .product-card-body {
   padding: var(--space-4) var(--space-5) var(--space-5);
 }

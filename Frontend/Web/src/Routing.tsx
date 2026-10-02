@@ -7,6 +7,7 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import SellPage from "./pages/SellPage";
 import EditProductPage from "./pages/EditProductPage";
 import MyListingsPage from "./pages/MyListingsPage";
+import OrdersPage from "./pages/OrdersPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function Routing() {
@@ -20,6 +21,7 @@ export default function Routing() {
       <Route path="/products/:id/edit" element={<ProtectedRoute><EditProductPage /></ProtectedRoute>} />
       <Route path="/sell" element={<ProtectedRoute><SellPage /></ProtectedRoute>} />
       <Route path="/my-listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
+      <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

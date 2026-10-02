@@ -10,6 +10,7 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="product-card-media">
         <ProductImage src={product.imageUrl} alt={product.title} />
         <span className="condition-badge">{capitalize(product.condition)}</span>
+        {product.status === "sold" && <span className="condition-badge status-sold">Sold</span>}
       </div>
       <div className="product-card-body">
         <h3>{product.title}</h3>

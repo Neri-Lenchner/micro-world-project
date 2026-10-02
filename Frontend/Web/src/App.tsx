@@ -21,7 +21,10 @@ export default function App() {
         <ul className="nav-links">
           <li><NavLink to="/products" end>Browse</NavLink></li>
           {user && (
-            <li><NavLink to="/my-listings">My listings</NavLink></li>
+            <>
+              <li><NavLink to="/my-listings">My listings</NavLink></li>
+              <li><NavLink to="/orders">Orders</NavLink></li>
+            </>
           )}
         </ul>
         <span className="nav-spacer" />

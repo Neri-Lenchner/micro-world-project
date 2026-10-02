@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { productsApi } from "../api/productsApi";
+import { ordersApi } from "../api/ordersApi";
 import { ApiError } from "../api/http";
 import { useCurrentUser } from "../auth/auth";
 import { Product } from "../types/product";
@@ -16,6 +17,7 @@ export default function ProductDetailsPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [buying, setBuying] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -32,6 +34,23 @@ export default function ProductDetailsPage() {
       ignore = true;
     };
   }, [id]);
+
+  async function handleBuy() {
+    if (!product) return;
+    if (!user) {
+      navigate(`/login?returnTo=${encodeURIComponent(`/products/${product.id}`)}`);
+      return;
+    }
+    setError(null);
+    setBuying(true);
+    try {
+      await ordersApi.create(product.id);
+      navigate("/orders");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Purchase failed");
+      setBuying(false);
+    }
+  }
 
   async function handleDelete() {
     if (!product || !window.confirm(`Delete "${product.title}"? This can't be undone.`)) return;
@@ -68,6 +87,7 @@ export default function ProductDetailsPage() {
           <p>
             <span className="tag">{capitalize(product.category)}</span>
             <span className="tag">{capitalize(product.condition)}</span>
+            {product.status === "sold" && <span className="tag status-sold">Sold</span>}
           </p>
           <p className="description">{product.description}</p>
           <p className="muted">
@@ -85,7 +105,13 @@ export default function ProductDetailsPage() {
             </div>
           ) : (
             <div className="actions">
-              <button className="accent" disabled title="Buying is coming in the Orders step">Buy now (coming soon)</button>
+              <button
+                className="accent"
+                onClick={handleBuy}
+                disabled={buying || product.status === "sold"}
+              >
+                {product.status === "sold" ? "Sold" : buying ? "Buying…" : "Buy now"}
+              </button>
             </div>
           )}
         </div>

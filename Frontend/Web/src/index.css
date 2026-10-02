@@ -256,6 +256,22 @@ button.accent:disabled {
   font-weight: 500;
 }
 
+.tag.status-sold,
+.tag.status-cancelled {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.tag.status-paid {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.tag.status-pending {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .back-link {
   display: inline-block;
   margin-bottom: var(--space-4);

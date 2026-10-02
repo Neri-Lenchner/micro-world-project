@@ -1,5 +1,6 @@
 export const CONDITIONS = ["new", "used"] as const;
 export type Condition = typeof CONDITIONS[number];
+export type ProductStatus = "available" | "sold";
 
 export interface Product {
   id: number;
@@ -11,6 +12,7 @@ export interface Product {
   imageUrl: string | null;
   sellerId: number;
   sellerEmail: string;
+  status: ProductStatus;
   createdAt: string;
   updatedAt: string;
 }

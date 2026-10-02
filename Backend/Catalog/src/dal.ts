@@ -1,5 +1,7 @@
-import mysql from "mysql2/promise";
+import mysql, {QueryError} from "mysql2/promise";
 import {appConfig} from "./app-config";
+
+const ER_DUP_FIELDNAME = 1060;
 
 class Dal {
     public readonly pool = mysql.createPool({
@@ -30,11 +32,16 @@ class Dal {
                 INDEX idx_products_category (category)
             )
         `);
-        // Added after the table already existed for some deployments; IF NOT EXISTS makes this safe to rerun.
-        await this.pool.query(`
-            ALTER TABLE products
-            ADD COLUMN IF NOT EXISTS status VARCHAR(10) NOT NULL DEFAULT 'available'
-        `);
+        // Added after the table already existed for some deployments; MySQL has no portable
+        // "ADD COLUMN IF NOT EXISTS" (that's MariaDB), so the duplicate-column error is swallowed instead.
+        try {
+            await this.pool.query(`
+                ALTER TABLE products
+                ADD COLUMN status VARCHAR(10) NOT NULL DEFAULT 'available'
+            `);
+        } catch (err) {
+            if ((err as QueryError).errno !== ER_DUP_FIELDNAME) throw err;
+        }
     }
 }
 
