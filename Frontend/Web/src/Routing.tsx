@@ -8,6 +8,7 @@ import SellPage from "./pages/SellPage";
 import EditProductPage from "./pages/EditProductPage";
 import MyListingsPage from "./pages/MyListingsPage";
 import OrdersPage from "./pages/OrdersPage";
+import WatchlistPage from "./pages/WatchlistPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function Routing() {
@@ -22,6 +23,7 @@ export default function Routing() {
       <Route path="/sell" element={<ProtectedRoute><SellPage /></ProtectedRoute>} />
       <Route path="/my-listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
       <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+      <Route path="/watchlist" element={<ProtectedRoute><WatchlistPage /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

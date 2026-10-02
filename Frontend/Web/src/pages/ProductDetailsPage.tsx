@@ -7,6 +7,7 @@ import { useCurrentUser } from "../auth/auth";
 import { Product } from "../types/product";
 import { capitalize, formatDate, formatPrice } from "../utils/format";
 import ProductImage from "../components/ProductImage";
+import SaveButton from "../components/SaveButton";
 import "./ProductDetailsPage.css";
 
 export default function ProductDetailsPage() {
@@ -112,6 +113,7 @@ export default function ProductDetailsPage() {
               >
                 {product.status === "sold" ? "Sold" : buying ? "Buying…" : "Buy now"}
               </button>
+              <SaveButton productId={product.id} />
             </div>
           )}
         </div>

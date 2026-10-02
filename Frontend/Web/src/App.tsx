@@ -24,6 +24,7 @@ export default function App() {
             <>
               <li><NavLink to="/my-listings">My listings</NavLink></li>
               <li><NavLink to="/orders">Orders</NavLink></li>
+              <li><NavLink to="/watchlist">Watchlist</NavLink></li>
             </>
           )}
         </ul>
