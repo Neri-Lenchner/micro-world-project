@@ -18,5 +18,9 @@ mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
     CREATE USER IF NOT EXISTS 'micro_world_watchlist'@'%' IDENTIFIED BY '${WATCHLIST_DB_PASSWORD}';
     GRANT ALL PRIVILEGES ON micro_world_watchlist_db.* TO 'micro_world_watchlist'@'%';
 
+    CREATE DATABASE IF NOT EXISTS micro_world_payments_db;
+    CREATE USER IF NOT EXISTS 'micro_world_payment'@'%' IDENTIFIED BY '${PAYMENT_DB_PASSWORD}';
+    GRANT ALL PRIVILEGES ON micro_world_payments_db.* TO 'micro_world_payment'@'%';
+
     FLUSH PRIVILEGES;
 EOSQL

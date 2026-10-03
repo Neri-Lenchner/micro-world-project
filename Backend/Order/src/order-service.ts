@@ -29,12 +29,18 @@ class OrderService {
         return order;
     }
 
-    public async markPaid(orderId: number, snapshot: ProductSnapshot): Promise<void> {
+    // The product is reserved but payment hasn't happened yet - fill in the snapshot while
+    // staying PENDING, so the order already shows real details even if payment then gets declined.
+    public async stageReserved(orderId: number, snapshot: ProductSnapshot): Promise<void> {
         await dal.pool.query(
-            `UPDATE orders SET product_title = ?, price = ?, seller_id = ?, seller_email = ?, status = 'PAID'
+            `UPDATE orders SET product_title = ?, price = ?, seller_id = ?, seller_email = ?
              WHERE id = ? AND status = 'PENDING'`,
             [snapshot.title, snapshot.price, snapshot.sellerId, snapshot.sellerEmail, orderId]
         );
+    }
+
+    public async confirmPaid(orderId: number): Promise<void> {
+        await dal.pool.query("UPDATE orders SET status = 'PAID' WHERE id = ? AND status = 'PENDING'", [orderId]);
     }
 
     public async markCancelled(orderId: number): Promise<void> {

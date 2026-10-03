@@ -323,6 +323,18 @@ importers:
         specifier: ^5.0.6
         version: 5.0.6
 
+  Backend/Payment:
+    dependencies:
+      '@nltech/messaging':
+        specifier: workspace:*
+        version: link:../../Libraries/Messaging
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+      mysql2:
+        specifier: ^3.11.5
+        version: 3.24.4(@types/node@25.8.0)
+
   Backend/Watchlist:
     dependencies:
       '@nltech/rest':

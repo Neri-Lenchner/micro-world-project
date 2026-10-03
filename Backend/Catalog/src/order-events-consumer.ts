@@ -8,6 +8,10 @@ interface OrderCreatedMessage {
     productId: number;
 }
 
+interface ProductReleaseMessage {
+    productId: number;
+}
+
 // Reserving a product for an order is the one operation that must never let two buyers both win:
 // the atomic conditional UPDATE is what actually prevents that, not anything RabbitMQ does.
 async function reserveProduct(productId: number): Promise<ProductRow | undefined> {
@@ -38,5 +42,12 @@ export async function startOrderEventsConsumer(): Promise<void> {
                 reason: "This item is no longer available",
             });
         }
+    });
+
+    // Payment was declined after this product was reserved - release it back to the marketplace.
+    await messaging.consume("product.release", async (message: ProductReleaseMessage) => {
+        await dal.pool.query(
+            "UPDATE products SET status = 'available' WHERE id = ? AND status = 'sold'", [message.productId]
+        );
     });
 }
