@@ -2,6 +2,7 @@ packages:
   - "Backend/*"
   - "Frontend/*"
   - "Libraries/*"
+  - "Tests/*"
 allowBuilds:
   bcrypt: false
   esbuild: true

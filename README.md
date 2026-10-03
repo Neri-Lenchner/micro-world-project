@@ -95,3 +95,14 @@ pnpm start   # runs every service with nodemon + ts-node, hot-reloading on chang
 ```
 
 Each service under `Backend/*` needs its own `.env` (see that service's `.env.example`) pointing at a MySQL instance running on your machine.
+
+## Testing
+
+```
+docker compose up -d   # the suite runs against a real running stack, through the Gateway
+pnpm test
+```
+
+`Tests/Integration` is an integration suite — it exercises the whole stack over real HTTP through the Gateway, the same path a browser uses, rather than mocking any service. It covers the things most worth proving actually work: the register/login flow, the full buy→pay→confirm saga, the shipment lifecycle's guard rails (only the seller ships, only the buyer confirms delivery, only at the right stage), watchlist idempotency, notification fan-out, and the Analytics numbers reconciling with real activity. The most important test is the **double-buy race condition**: two buyers hitting "Buy now" on the same listing at the same instant — it asserts exactly one of them can ever win the reservation, which is the one correctness property the whole Catalog/Order/Payment saga exists to guarantee.
+
+Runs automatically on every push via GitHub Actions (`.github/workflows/ci.yml`): a fast `build` job (compiles every package) and an `integration-tests` job (builds and runs the real Docker Compose stack, then runs this suite against it).

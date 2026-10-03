@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r build
+
+  integration-tests:
+    name: Integration tests (Docker)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Throwaway values that live only for this CI run's containers - never used anywhere
+      # outside this ephemeral job, so there's no secret to actually protect here.
+      - name: Write .env for docker compose
+        run: |
+          cat > .env <<'EOF'
+          MYSQL_ROOT_PASSWORD=ci_root_pw
+          AUTH_DB_PASSWORD=ci_auth_pw
+          CATALOG_DB_PASSWORD=ci_catalog_pw
+          ORDER_DB_PASSWORD=ci_order_pw
+          WATCHLIST_DB_PASSWORD=ci_watchlist_pw
+          PAYMENT_DB_PASSWORD=ci_payment_pw
+          NOTIFICATION_DB_PASSWORD=ci_notification_pw
+          ANALYTICS_DB_PASSWORD=ci_analytics_pw
+          RABBITMQ_USER=ci_rabbit
+          RABBITMQ_PASSWORD=ci_rabbit_pw
+          JWT_SECRET_KEY=ci_jwt_secret
+          EOF
+
+      - run: docker compose build
+      - run: docker compose up -d
+
+      # No separate "wait for healthy" step - the test suite's own waitForGateway()
+      # helper already retries for up to 60s, which is what docker compose up itself
+      # doesn't guarantee (containers report "started" well before they're ready).
+      - name: Run integration tests
+        run: pnpm test
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

@@ -1,0 +1,12 @@
+{
+  "name": "@nltech/tests-integration",
+  "version": "1.0.0",
+  "description": "Integration tests that exercise the real stack over HTTP, through the Gateway - same thing this project's manual verification has been doing with curl all along, made repeatable.",
+  "private": true,
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  }
+}
