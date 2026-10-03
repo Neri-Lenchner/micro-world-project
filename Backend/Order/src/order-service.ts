@@ -99,6 +99,7 @@ class OrderService {
             sellerId: row.seller_id,
             sellerEmail: row.seller_email,
             productTitle: row.product_title,
+            price: row.price,
             status: row.status,
         });
     }

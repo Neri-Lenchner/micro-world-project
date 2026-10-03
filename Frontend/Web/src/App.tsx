@@ -20,6 +20,7 @@ export default function App() {
         </Link>
         <ul className="nav-links">
           <li><NavLink to="/products" end>Browse</NavLink></li>
+          <li><NavLink to="/analytics">Analytics</NavLink></li>
           {user && (
             <>
               <li><NavLink to="/my-listings">My listings</NavLink></li>

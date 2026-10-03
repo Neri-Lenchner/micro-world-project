@@ -10,6 +10,7 @@ services:
       WATCHLIST_DB_PASSWORD: ${WATCHLIST_DB_PASSWORD}
       PAYMENT_DB_PASSWORD: ${PAYMENT_DB_PASSWORD}
       NOTIFICATION_DB_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
+      ANALYTICS_DB_PASSWORD: ${ANALYTICS_DB_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./infrastructure/mysql/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
@@ -164,6 +165,28 @@ services:
         condition: service_healthy
     networks: [microworld]
 
+  analytics:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.backend
+      args:
+        SERVICE_DIR: Backend/Analytics
+    restart: unless-stopped
+    environment:
+      PORT: 4005
+      MYSQL_HOST: mysql
+      MYSQL_USER: micro_world_analytics
+      MYSQL_PASSWORD: ${ANALYTICS_DB_PASSWORD}
+      MYSQL_DATABASE: micro_world_analytics_db
+      DB_TIMEZONE: "+00:00"
+      RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [microworld]
+
   gateway:
     build:
       context: .
@@ -178,6 +201,7 @@ services:
       ORDER_SERVICE_URL: http://order:4002
       WATCHLIST_SERVICE_URL: http://watchlist:4003
       NOTIFICATION_SERVICE_URL: http://notification:4004
+      ANALYTICS_SERVICE_URL: http://analytics:4005
       SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8081:80"
@@ -187,6 +211,7 @@ services:
       - order
       - watchlist
       - notification
+      - analytics
     networks: [microworld]
 
   web:

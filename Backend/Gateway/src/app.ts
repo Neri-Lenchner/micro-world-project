@@ -58,6 +58,11 @@ class App {
             proxyReqOptDecorator: forwardUserHeaders
         }));
 
+        // Marketplace-wide dashboard, public like Browse.
+        server.use("/api/analytics", proxy(appConfig.analyticsServiceUrl, {
+            proxyReqPathResolver: request => "/api/analytics" + request.url
+        }));
+
         server.use(errorMiddleware.catchAll);
 
         server.listen(appConfig.port, () =>

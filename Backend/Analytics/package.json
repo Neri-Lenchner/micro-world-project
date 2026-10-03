@@ -1,0 +1,23 @@
+{
+  "name": "@nltech/analytics",
+  "version": "1.0.0",
+  "description": "Analytics Microservice - aggregates stats from order/payment events",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon --exec ts-node src/app.ts --quiet"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nltech/messaging": "workspace:*",
+    "@nltech/rest": "workspace:*",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mysql2": "^3.11.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}

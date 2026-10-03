@@ -9,6 +9,7 @@ class AppConfig {
     public readonly orderServiceUrl: string = process.env.ORDER_SERVICE_URL as string;
     public readonly watchlistServiceUrl: string = process.env.WATCHLIST_SERVICE_URL as string;
     public readonly notificationServiceUrl: string = process.env.NOTIFICATION_SERVICE_URL as string;
+    public readonly analyticsServiceUrl: string = process.env.ANALYTICS_SERVICE_URL as string;
     public readonly secretKey: string = process.env.SECRET_KEY as string;
 }
 
