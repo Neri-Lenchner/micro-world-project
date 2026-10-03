@@ -15,10 +15,11 @@ Browser → Web (nginx) → Gateway → Auth       → MySQL (micro_world_users_
 
                                 Order → RabbitMQ (order.status-changed) → Notification → MySQL (micro_world_notifications_db)
                                 Order → RabbitMQ (order.created, order.status-changed) → Analytics → MySQL (micro_world_analytics_db)
+                                Order → RabbitMQ (order.status-changed) → Gateway → Socket.IO → every connected browser (live events feed)
 ```
 
 - **Web** — React + TypeScript (Vite), built as static files and served by nginx.
-- **Gateway** — routes `/api/auth/*`, `/api/products/*`, `/api/orders/*`, `/api/watchlist/*`, `/api/notifications/*`, and `/api/analytics/*` to the right backend service, verifies JWTs, and forwards the logged-in user's identity downstream.
+- **Gateway** — routes `/api/auth/*`, `/api/products/*`, `/api/orders/*`, `/api/watchlist/*`, `/api/notifications/*`, and `/api/analytics/*` to the right backend service, verifies JWTs, and forwards the logged-in user's identity downstream. Also runs a Socket.IO server on the same HTTP server/port: it consumes `order.status-changed` itself and broadcasts a sanitized public event (what happened, to which listing, for how much — no buyer/seller identity) to every connected browser, which is what powers the live feed on the Analytics page.
 - **Auth** — registration/login, owns `micro_world_users_db`.
 - **Catalog** — product listings and photo uploads, owns `micro_world_catalog_db`.
 - **Order** — buying a listing and order history, owns `micro_world_orders_db`. Doesn't call Catalog or Payment directly: it publishes an `order.created` message to RabbitMQ, Catalog reserves the product (an atomic conditional `UPDATE`, so two simultaneous buyers can never both win) and replies with `product.reserved`/`product.reserve-failed`. A reserved order then goes through Payment the same way before resolving to `PAID` or `CANCELLED`. From there, the full lifecycle is `PENDING → PAID → SHIPPED → DELIVERED` (or `CANCELLED`): the seller marks a paid order shipped, the buyer marks a shipped order delivered (`PUT /api/orders/:id/status`), each guarded so only the right party can make that specific transition.
@@ -55,6 +56,7 @@ This builds nine images (Auth, Catalog, Order, Watchlist, Payment, Notification,
 
 - Frontend: http://localhost:8080
 - Gateway API (direct, optional — mainly for debugging): http://localhost:8081
+- Visit the Analytics page and buy/ship/deliver something in another tab to watch the live events feed update in real time via Socket.IO
 - RabbitMQ management UI (see the `order.created`/`product.reserved`/`product.reserve-failed` queues live): http://localhost:15672, log in with `RABBITMQ_USER`/`RABBITMQ_PASSWORD` from your `.env`
 
 **Stopping:**

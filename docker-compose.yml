@@ -202,16 +202,25 @@ services:
       WATCHLIST_SERVICE_URL: http://watchlist:4003
       NOTIFICATION_SERVICE_URL: http://notification:4004
       ANALYTICS_SERVICE_URL: http://analytics:4005
+      RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
       SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8081:80"
     depends_on:
-      - auth
-      - catalog
-      - order
-      - watchlist
-      - notification
-      - analytics
+      auth:
+        condition: service_started
+      catalog:
+        condition: service_started
+      order:
+        condition: service_started
+      watchlist:
+        condition: service_started
+      notification:
+        condition: service_started
+      analytics:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     networks: [microworld]
 
   web:

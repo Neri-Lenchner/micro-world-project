@@ -1,8 +1,12 @@
+import http from "http";
 import express from "express";
 import proxy from "express-http-proxy";
+import {Server} from "socket.io";
+import {messaging} from "@nltech/messaging";
 import { appConfig } from "./app-config";
 import { errorMiddleware } from "@nltech/rest";
 import {optionalToken, verifyToken} from "./middleware/verify-token";
+import {startOrderEventsConsumer} from "./order-events-consumer";
 
 function forwardUserHeaders(proxyReqOpts: any, srcReq: any) {
     delete proxyReqOpts.headers["x-user-id"];
@@ -65,7 +69,14 @@ class App {
 
         server.use(errorMiddleware.catchAll);
 
-        server.listen(appConfig.port, () =>
+        // Socket.IO rides the same HTTP server as the REST proxy - one port, one process.
+        const httpServer = http.createServer(server);
+        const io = new Server(httpServer);
+
+        await messaging.connect(appConfig.rabbitmqUrl);
+        await startOrderEventsConsumer(io);
+
+        httpServer.listen(appConfig.port, () =>
             console.log(`Gateway listening on port ${appConfig.port}`)
         );
     }

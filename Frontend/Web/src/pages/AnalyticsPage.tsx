@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import { analyticsApi } from "../api/analyticsApi";
 import { AnalyticsSummary } from "../types/analytics";
 import { formatCount, formatPrice } from "../utils/format";
 import "./AnalyticsPage.css";
 
+interface LiveEvent {
+  key: string;
+  status: string;
+  productTitle: string;
+  price: number | null;
+  at: string;
+}
+
+const MAX_EVENTS = 15;
+
+const STATUS_LABEL: Record<string, string> = {
+  PAID: "Paid",
+  SHIPPED: "Shipped",
+  DELIVERED: "Delivered",
+  CANCELLED: "Cancelled",
+};
+
 export default function AnalyticsPage() {
   const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
+  const [events, setEvents] = useState<LiveEvent[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -13,6 +32,18 @@ export default function AnalyticsPage() {
       .summary()
       .then(setSummary)
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load analytics"));
+  }, []);
+
+  // A public, anonymized feed of order events as they happen elsewhere on the site -
+  // the architecture literally made visible, not just described.
+  useEffect(() => {
+    const socket = io();
+    socket.on("order-event", (event: Omit<LiveEvent, "key">) => {
+      setEvents((current) => [{ ...event, key: `${event.at}-${Math.random()}` }, ...current].slice(0, MAX_EVENTS));
+    });
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (
@@ -56,6 +87,27 @@ export default function AnalyticsPage() {
           </div>
         </div>
       )}
+
+      <div className="live-feed">
+        <div className="live-feed-header">
+          <h2>Live events</h2>
+          <span className="live-dot" aria-hidden="true" />
+        </div>
+        {events.length === 0 ? (
+          <p className="muted">Waiting for activity — buy, ship, or deliver something to see it appear here.</p>
+        ) : (
+          <ul className="live-feed-list">
+            {events.map((event) => (
+              <li key={event.key} className="live-feed-row">
+                <span className={`tag status-${event.status.toLowerCase()}`}>{STATUS_LABEL[event.status] ?? event.status}</span>
+                <span className="live-feed-detail">
+                  "{event.productTitle}"{event.price !== null && ` · ${formatPrice(event.price)}`}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
