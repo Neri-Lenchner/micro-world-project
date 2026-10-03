@@ -9,6 +9,7 @@ import EditProductPage from "./pages/EditProductPage";
 import MyListingsPage from "./pages/MyListingsPage";
 import OrdersPage from "./pages/OrdersPage";
 import WatchlistPage from "./pages/WatchlistPage";
+import NotificationsPage from "./pages/NotificationsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function Routing() {
@@ -24,6 +25,7 @@ export default function Routing() {
       <Route path="/my-listings" element={<ProtectedRoute><MyListingsPage /></ProtectedRoute>} />
       <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
       <Route path="/watchlist" element={<ProtectedRoute><WatchlistPage /></ProtectedRoute>} />
+      <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

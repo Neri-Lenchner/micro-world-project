@@ -22,5 +22,9 @@ mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
     CREATE USER IF NOT EXISTS 'micro_world_payment'@'%' IDENTIFIED BY '${PAYMENT_DB_PASSWORD}';
     GRANT ALL PRIVILEGES ON micro_world_payments_db.* TO 'micro_world_payment'@'%';
 
+    CREATE DATABASE IF NOT EXISTS micro_world_notifications_db;
+    CREATE USER IF NOT EXISTS 'micro_world_notification'@'%' IDENTIFIED BY '${NOTIFICATION_DB_PASSWORD}';
+    GRANT ALL PRIVILEGES ON micro_world_notifications_db.* TO 'micro_world_notification'@'%';
+
     FLUSH PRIVILEGES;
 EOSQL

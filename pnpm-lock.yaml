@@ -301,6 +301,28 @@ importers:
         specifier: ^1.6.6
         version: 1.6.7
 
+  Backend/Notification:
+    dependencies:
+      '@nltech/messaging':
+        specifier: workspace:*
+        version: link:../../Libraries/Messaging
+      '@nltech/rest':
+        specifier: workspace:*
+        version: link:../../Libraries/Rest
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
+      mysql2:
+        specifier: ^3.11.5
+        version: 3.24.4(@types/node@25.8.0)
+    devDependencies:
+      '@types/express':
+        specifier: ^5.0.6
+        version: 5.0.6
+
   Backend/Order:
     dependencies:
       '@nltech/messaging':

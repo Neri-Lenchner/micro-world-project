@@ -41,10 +41,12 @@ class OrderService {
 
     public async confirmPaid(orderId: number): Promise<void> {
         await dal.pool.query("UPDATE orders SET status = 'PAID' WHERE id = ? AND status = 'PENDING'", [orderId]);
+        await this.publishStatusChanged(orderId);
     }
 
     public async markCancelled(orderId: number): Promise<void> {
         await dal.pool.query("UPDATE orders SET status = 'CANCELLED' WHERE id = ? AND status = 'PENDING'", [orderId]);
+        await this.publishStatusChanged(orderId);
     }
 
     // role "selling" only ever surfaces orders that have resolved to a known seller (see note in dal.ts/order.ts) —
@@ -74,6 +76,7 @@ class OrderService {
         }
 
         await dal.pool.query("UPDATE orders SET status = ? WHERE id = ? AND status = ?", [newStatus, row.id, row.status]);
+        await this.publishStatusChanged(row.id);
         return this.getById(id, user);
     }
 
@@ -82,6 +85,22 @@ class OrderService {
         if (!row) throw new ResourceNotFound(id);
         if (row.buyer_id !== user.id && row.seller_id !== user.id) throw new ForbiddenError("You can only view your own orders");
         return toOrder(row);
+    }
+
+    // Fires for every transition Notification might care about (not PENDING - that's just the
+    // buyer's own "Buy now" click, nothing for anyone to be told about yet).
+    private async publishStatusChanged(orderId: number): Promise<void> {
+        const row = await this.findRow(orderId);
+        if (!row) return;
+        await messaging.publish("order.status-changed", {
+            orderId: row.id,
+            buyerId: row.buyer_id,
+            buyerEmail: row.buyer_email,
+            sellerId: row.seller_id,
+            sellerEmail: row.seller_email,
+            productTitle: row.product_title,
+            status: row.status,
+        });
     }
 
     private async findRow(id: number): Promise<OrderRow | undefined> {

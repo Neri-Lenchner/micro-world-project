@@ -1,0 +1,42 @@
+.notifications {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.notification-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.notification-dot {
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.notification-row.unread .notification-dot {
+  background: var(--accent);
+}
+
+.notification-row.unread p:first-child {
+  font-weight: 600;
+}
+
+.notification-body p {
+  margin: 0;
+}
+
+.notification-body p + p {
+  margin-top: var(--space-1);
+}

@@ -52,6 +52,12 @@ class App {
             proxyReqOptDecorator: forwardUserHeaders
         }));
 
+        // Reading/updating notifications both require being logged in.
+        server.use("/api/notifications", verifyToken, proxy(appConfig.notificationServiceUrl, {
+            proxyReqPathResolver: request => "/api/notifications" + request.url,
+            proxyReqOptDecorator: forwardUserHeaders
+        }));
+
         server.use(errorMiddleware.catchAll);
 
         server.listen(appConfig.port, () =>
