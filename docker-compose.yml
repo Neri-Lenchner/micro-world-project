@@ -53,7 +53,7 @@ services:
       DB_TIMEZONE: "+00:00"
       SECRET_KEY: ${JWT_SECRET_KEY}
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4000/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -80,7 +80,7 @@ services:
     volumes:
       - catalog_uploads:/repo/Backend/Catalog/uploads
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4001/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4001/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -107,7 +107,7 @@ services:
       DB_TIMEZONE: "+00:00"
       RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4002/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4002/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -133,7 +133,7 @@ services:
       MYSQL_DATABASE: micro_world_watchlist_db
       DB_TIMEZONE: "+00:00"
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4003/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4003/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -179,7 +179,7 @@ services:
       DB_TIMEZONE: "+00:00"
       RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4004/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4004/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -206,7 +206,7 @@ services:
       DB_TIMEZONE: "+00:00"
       RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4005/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4005/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 3s
       timeout: 3s
       retries: 20
