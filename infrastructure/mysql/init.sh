@@ -1,4 +1,9 @@
 #!/bin/bash
+# This file is sourced (not executed) by MySQL's docker-entrypoint.sh, so `set -euo
+# pipefail` at the top level would leak into and permanently alter the parent script's
+# shell options - which once crashed MySQL's own later code with an unrelated "unbound
+# variable" error. Run everything in a subshell so the strict mode stays contained here.
+(
 set -euo pipefail
 
 mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
@@ -32,3 +37,4 @@ mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
 
     FLUSH PRIVILEGES;
 EOSQL
+)
