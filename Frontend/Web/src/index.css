@@ -262,12 +262,14 @@ button.accent:disabled {
   color: var(--danger);
 }
 
-.tag.status-paid {
+.tag.status-paid,
+.tag.status-delivered {
   background: var(--success-bg);
   color: var(--success);
 }
 
-.tag.status-pending {
+.tag.status-pending,
+.tag.status-shipped {
   background: var(--accent-soft);
   color: var(--accent);
 }

@@ -57,6 +57,26 @@ class OrderService {
         return rows.map(toOrder);
     }
 
+    // The only transitions a person can trigger directly - PENDING/PAID/CANCELLED are all
+    // driven by the Catalog/Payment saga, not by a direct request.
+    public async updateStatus(id: string, user: CurrentUser, newStatus: string): Promise<Order> {
+        const row = await this.findRow(this.parseId(id));
+        if (!row) throw new ResourceNotFound(id);
+
+        if (newStatus === "SHIPPED") {
+            if (row.seller_id !== user.id) throw new ForbiddenError("Only the seller can mark an order as shipped");
+            if (row.status !== "PAID") throw new ValidationError("Only a paid order can be marked as shipped");
+        } else if (newStatus === "DELIVERED") {
+            if (row.buyer_id !== user.id) throw new ForbiddenError("Only the buyer can mark an order as delivered");
+            if (row.status !== "SHIPPED") throw new ValidationError("Only a shipped order can be marked as delivered");
+        } else {
+            throw new ValidationError("status must be SHIPPED or DELIVERED");
+        }
+
+        await dal.pool.query("UPDATE orders SET status = ? WHERE id = ? AND status = ?", [newStatus, row.id, row.status]);
+        return this.getById(id, user);
+    }
+
     public async getById(id: string, user: CurrentUser): Promise<Order> {
         const row = await this.findRow(this.parseId(id));
         if (!row) throw new ResourceNotFound(id);

@@ -14,6 +14,7 @@ class OrderController {
         this.router.post("/api/orders", requireUser, this.create);
         this.router.get("/api/orders", requireUser, this.list);
         this.router.get("/api/orders/:id", requireUser, this.getOne);
+        this.router.put("/api/orders/:id/status", requireUser, this.updateStatus);
     }
 
     public async create(request: Request, response: Response) {
@@ -27,6 +28,11 @@ class OrderController {
 
     public async getOne(request: Request, response: Response) {
         response.json(await orderService.getById(request.params.id as string, getCurrentUser(request)!));
+    }
+
+    public async updateStatus(request: Request, response: Response) {
+        const order = await orderService.updateStatus(request.params.id as string, getCurrentUser(request)!, request.body?.status);
+        response.json(order);
     }
 }
 

@@ -1,6 +1,6 @@
 import {RowDataPacket} from "mysql2";
 
-export type OrderStatus = "PENDING" | "PAID" | "CANCELLED";
+export type OrderStatus = "PENDING" | "PAID" | "SHIPPED" | "DELIVERED" | "CANCELLED";
 
 export interface OrderRow extends RowDataPacket {
     id: number;

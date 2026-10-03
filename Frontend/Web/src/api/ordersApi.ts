@@ -16,6 +16,10 @@ class OrdersApi {
   getById(id: number): Promise<Order> {
     return http<Order>(`${BASE_URL}/${id}`);
   }
+
+  updateStatus(id: number, status: "SHIPPED" | "DELIVERED"): Promise<Order> {
+    return http<Order>(`${BASE_URL}/${id}/status`, { method: "PUT", body: { status } });
+  }
 }
 
 export const ordersApi = new OrdersApi();

@@ -8,6 +8,8 @@ import "./OrdersPage.css";
 const STATUS_LABEL: Record<Order["status"], string> = {
   PENDING: "Pending",
   PAID: "Paid",
+  SHIPPED: "Shipped",
+  DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
 };
 
@@ -15,6 +17,7 @@ export default function OrdersPage() {
   const [tab, setTab] = useState<"buying" | "selling">("buying");
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
@@ -45,6 +48,19 @@ export default function OrdersPage() {
     if (!pollRef.current) return;
     clearInterval(pollRef.current);
     pollRef.current = undefined;
+  }
+
+  async function handleUpdateStatus(order: Order, status: "SHIPPED" | "DELIVERED") {
+    setUpdatingId(order.id);
+    setError(null);
+    try {
+      const updated = await ordersApi.updateStatus(order.id, status);
+      setOrders((current) => current?.map((o) => (o.id === updated.id ? updated : o)) ?? null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update order");
+    } finally {
+      setUpdatingId(null);
+    }
   }
 
   return (
@@ -87,6 +103,16 @@ export default function OrdersPage() {
                   {tab === "buying" ? `Sold by ${order.sellerEmail ?? "…"}` : `Bought by ${order.buyerEmail}`} · {formatDate(order.createdAt)}
                 </p>
               </div>
+              {tab === "selling" && order.status === "PAID" && (
+                <button className="secondary" disabled={updatingId === order.id} onClick={() => handleUpdateStatus(order, "SHIPPED")}>
+                  {updatingId === order.id ? "Updating…" : "Mark shipped"}
+                </button>
+              )}
+              {tab === "buying" && order.status === "SHIPPED" && (
+                <button className="secondary" disabled={updatingId === order.id} onClick={() => handleUpdateStatus(order, "DELIVERED")}>
+                  {updatingId === order.id ? "Updating…" : "Mark received"}
+                </button>
+              )}
               <span className={`tag status-${order.status.toLowerCase()}`}>{STATUS_LABEL[order.status]}</span>
             </li>
           ))}
