@@ -1,5 +1,12 @@
 import {beforeAll, describe, expect, it} from "vitest";
-import {createListing, registerAndLogin, request, waitForGateway, waitForOrderResolved} from "./helpers";
+import {
+    createListing,
+    registerAndLogin,
+    request,
+    waitForAnalyticsResolvedCount,
+    waitForGateway,
+    waitForOrderResolved,
+} from "./helpers";
 
 beforeAll(() => waitForGateway());
 
@@ -13,12 +20,11 @@ describe("Analytics", () => {
         const created = await request("/api/orders", {method: "POST", token: buyer.token, body: {productId}});
         const resolved = await waitForOrderResolved(buyer.token, created.body.id);
 
-        const after = (await request("/api/analytics/summary")).body;
+        const resolvedCountBefore = before.paidCount + before.cancelledCount;
+        const after = await waitForAnalyticsResolvedCount(resolvedCountBefore + 1);
 
         expect(after.ordersPlaced).toBe(before.ordersPlaced + 1);
-        const resolvedCountBefore = before.paidCount + before.cancelledCount;
-        const resolvedCountAfter = after.paidCount + after.cancelledCount;
-        expect(resolvedCountAfter).toBe(resolvedCountBefore + 1);
+        expect(after.paidCount + after.cancelledCount).toBe(resolvedCountBefore + 1);
 
         if (resolved.status === "PAID") {
             expect(after.totalRevenue).toBeCloseTo(before.totalRevenue + resolved.price, 2);

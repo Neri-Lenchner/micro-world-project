@@ -103,6 +103,21 @@ export async function waitForOrderResolved(token: string, orderId: number, timeo
     throw new Error(`Order ${orderId} did not resolve out of PENDING within ${timeoutMs}ms (last seen: ${JSON.stringify(last)})`);
 }
 
+// The order.status-changed event that drives these counters is consumed off RabbitMQ
+// asynchronously, so it can lag slightly behind the order's own status flipping to
+// PAID/CANCELLED (which waitForOrderResolved observes directly via the Order service's
+// own API, with no queue in between). Poll instead of reading the summary once.
+export async function waitForAnalyticsResolvedCount(expectedCount: number, timeoutMs = 5_000): Promise<any> {
+    const deadline = Date.now() + timeoutMs;
+    let last: any;
+    while (Date.now() < deadline) {
+        last = (await request("/api/analytics/summary")).body;
+        if (last.paidCount + last.cancelledCount >= expectedCount) return last;
+        await sleep(200);
+    }
+    throw new Error(`Analytics resolved count did not reach ${expectedCount} within ${timeoutMs}ms (last seen: ${JSON.stringify(last)})`);
+}
+
 // Payment approves ~85% of the time by design (see Backend/Payment) - tests that need a
 // PAID order as a precondition (e.g. shipment) retry with a fresh listing on a decline,
 // rather than asserting a single purchase always succeeds. ~10 attempts makes a false
