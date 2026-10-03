@@ -15,7 +15,11 @@ services:
       - mysql_data:/var/lib/mysql
       - ./infrastructure/mysql/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      # "-h localhost" would make the mysql client use the local Unix socket, which the
+      # networking-disabled temporary init server also exposes - that let this falsely
+      # report healthy before the real, TCP-listening server had even started. 127.0.0.1
+      # forces a real TCP check, matching how every other container actually connects.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 20
