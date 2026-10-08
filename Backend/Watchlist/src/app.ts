@@ -3,6 +3,7 @@ import {errorMiddleware} from "@nltech/rest";
 import {appConfig} from "./app-config";
 import {dal} from "./dal";
 import {watchlistController} from "./watchlist-controller";
+import {seed} from "./seed";
 
 class App {
 
@@ -10,6 +11,7 @@ class App {
         const server = express();
 
         await dal.init();
+        await seed();
 
         server.use(express.json());
         server.use(watchlistController.router);

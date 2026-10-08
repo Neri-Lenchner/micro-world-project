@@ -5,6 +5,7 @@ import {appConfig} from "./app-config";
 import {dal} from "./dal";
 import {notificationController} from "./notification-controller";
 import {startOrderEventsConsumer} from "./order-events-consumer";
+import {seed} from "./seed";
 
 class App {
 
@@ -12,6 +13,7 @@ class App {
         const server = express();
 
         await dal.init();
+        await seed();
         await messaging.connect(appConfig.rabbitmqUrl);
         await startOrderEventsConsumer();
 

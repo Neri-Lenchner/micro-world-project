@@ -219,6 +219,9 @@ importers:
 
   Backend/Analytics:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/messaging':
         specifier: workspace:*
         version: link:../../Libraries/Messaging
@@ -241,6 +244,9 @@ importers:
 
   Backend/Auth:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/rest':
         specifier: workspace:*
         version: link:../../Libraries/Rest
@@ -275,6 +281,9 @@ importers:
 
   Backend/Catalog:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/messaging':
         specifier: workspace:*
         version: link:../../Libraries/Messaging
@@ -331,6 +340,9 @@ importers:
 
   Backend/Notification:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/messaging':
         specifier: workspace:*
         version: link:../../Libraries/Messaging
@@ -353,6 +365,9 @@ importers:
 
   Backend/Order:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/messaging':
         specifier: workspace:*
         version: link:../../Libraries/Messaging
@@ -375,6 +390,9 @@ importers:
 
   Backend/Payment:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/messaging':
         specifier: workspace:*
         version: link:../../Libraries/Messaging
@@ -387,6 +405,9 @@ importers:
 
   Backend/Watchlist:
     dependencies:
+      '@nltech/demo-data':
+        specifier: workspace:*
+        version: link:../../Libraries/DemoData
       '@nltech/rest':
         specifier: workspace:*
         version: link:../../Libraries/Rest
@@ -434,6 +455,8 @@ importers:
       vite:
         specifier: ^5.4.6
         version: 5.4.21(@types/node@25.8.0)
+
+  Libraries/DemoData: {}
 
   Libraries/Messaging:
     dependencies:

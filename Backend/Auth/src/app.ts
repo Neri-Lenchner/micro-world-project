@@ -3,6 +3,7 @@ import {appConfig} from "./app-config";
 import {dal} from "./dal";
 import {userController} from "./user-controller";
 import {errorMiddleware} from "@nltech/rest";
+import {seed} from "./seed";
 
 class App {
 
@@ -10,6 +11,7 @@ class App {
         const server = express();
 
         await dal.init();
+        await seed();
 
         server.use(express.json());
         server.use(userController.router);

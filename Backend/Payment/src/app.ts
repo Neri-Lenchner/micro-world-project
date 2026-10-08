@@ -2,12 +2,14 @@ import {messaging} from "@nltech/messaging";
 import {appConfig} from "./app-config";
 import {dal} from "./dal";
 import {startPaymentEventsConsumer} from "./payment-events-consumer";
+import {seed} from "./seed";
 
 class App {
 
     // No HTTP server - Payment is a pure background worker, reachable only through RabbitMQ.
     public async start(): Promise<void> {
         await dal.init();
+        await seed();
         await messaging.connect(appConfig.rabbitmqUrl);
         await startPaymentEventsConsumer();
         console.log("Payment worker ready, consuming payment.requested");

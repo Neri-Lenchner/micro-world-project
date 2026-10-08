@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@nltech/messaging": "workspace:*",
+    "@nltech/demo-data": "workspace:*",
     "dotenv": "^17.4.2",
     "mysql2": "^3.11.5"
   }

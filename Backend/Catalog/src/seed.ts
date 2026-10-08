@@ -1,10 +1,8 @@
 // Fills the catalog with demo products so the Browse page isn't empty.
-// Run with: pnpm --filter @nltech/catalog seed
-// Safe to run again: it only deletes and re-creates the demo seller's products.
+// Auto-run once from app.ts on first boot (only if the products table is empty); also runnable
+// manually with: pnpm --filter @nltech/catalog seed (now a no-op if already seeded, not a reset).
 import {dal} from "./dal";
-
-const DEMO_SELLER_ID = 0; // Real users start at id 1, so 0 never clashes with a real account.
-const DEMO_SELLER_EMAIL = "demo@microworld.com";
+import {DEMO_USERS} from "@nltech/demo-data";
 
 // The last column is a file name on Wikimedia Commons (free-licensed photos of the actual kind of item).
 type SeedProduct = [title: string, description: string, price: number, category: string, condition: string, commonsFile: string];
@@ -38,25 +36,34 @@ function commonsImageUrl(fileName: string): string {
     return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName.replace(/ /g, "_"))}?width=600`;
 }
 
-async function seed(): Promise<void> {
-    await dal.init();
-    await dal.pool.query("DELETE FROM products WHERE seller_id = ?", [DEMO_SELLER_ID]);
+export async function seed(): Promise<void> {
+    const [[{count}]] = await dal.pool.query<any[]>("SELECT COUNT(*) AS count FROM products");
+    if (count > 0) {
+        console.log("Products table already has data - skipping demo seed.");
+        return;
+    }
 
-    for (const [title, description, price, category, condition, commonsFile] of products) {
-        const imageUrl = commonsImageUrl(commonsFile);
+    // First 14 belong to Alice, last 7 to Carol - must stay in sync with the productId
+    // references in @nltech/demo-data's DEMO_ORDERS/DEMO_WATCHLIST, which assume this exact
+    // insertion order (positional, 1-indexed, relying on AUTO_INCREMENT starting at 1).
+    for (let i = 0; i < products.length; i++) {
+        const [title, description, price, category, condition, commonsFile] = products[i];
+        const seller = i < 14 ? DEMO_USERS.alice : DEMO_USERS.carol;
         await dal.pool.query(
             `INSERT INTO products (title, description, price, category, \`condition\`, image_url, seller_id, seller_email)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [title, description, price, category, condition, imageUrl, DEMO_SELLER_ID, DEMO_SELLER_EMAIL]
+            [title, description, price, category, condition, commonsImageUrl(commonsFile), seller.id, seller.email]
         );
     }
-
     console.log(`Seeded ${products.length} demo products.`);
 }
 
-seed()
-    .catch(err => {
-        console.error("Seeding failed:", err);
-        process.exitCode = 1;
-    })
-    .finally(() => dal.pool.end());
+if (require.main === module) {
+    dal.init()
+        .then(seed)
+        .catch(err => {
+            console.error("Seeding failed:", err);
+            process.exitCode = 1;
+        })
+        .finally(() => dal.pool.end());
+}

@@ -6,6 +6,7 @@ import {dal} from "./dal";
 import {productController} from "./product-controller";
 import {startOrderEventsConsumer} from "./order-events-consumer";
 import {IMAGES_URL_PREFIX, UPLOADS_DIR} from "./upload-image-service";
+import {seed} from "./seed";
 
 class App {
 
@@ -13,6 +14,7 @@ class App {
         const server = express();
 
         await dal.init();
+        await seed();
         await messaging.connect(appConfig.rabbitmqUrl);
         await startOrderEventsConsumer();
 

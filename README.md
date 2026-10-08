@@ -59,6 +59,18 @@ This builds nine images (Auth, Catalog, Order, Watchlist, Payment, Notification,
 - Visit the Analytics page and buy/ship/deliver something in another tab to watch the live events feed update in real time via Socket.IO
 - RabbitMQ management UI (see the `order.created`/`product.reserved`/`product.reserve-failed` queues live): http://localhost:15672, log in with `RABBITMQ_USER`/`RABBITMQ_PASSWORD` from your `.env`
 
+**Demo data**
+
+The marketplace is pre-populated automatically the first time you run `docker compose up --build` against a fresh database — no manual seeding step required. You can log in immediately with any of these:
+
+| Email | Password | Role |
+|---|---|---|
+| alice@microworld.com | Demo1234! | seller (14 listings) |
+| carol@microworld.com | Demo1234! | seller (7 listings) |
+| bob@microworld.com   | Demo1234! | buyer (orders in every status, notifications, watchlist) |
+
+Each service seeds its own database once, the first time it finds its main table empty — restarting the stack (without wiping `mysql_data`) won't duplicate or re-seed anything. You can also register your own account and use the site alongside the demo data exactly like a real user.
+
 **Stopping:**
 
 ```

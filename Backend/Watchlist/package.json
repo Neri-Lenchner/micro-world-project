@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@nltech/rest": "workspace:*",
+    "@nltech/demo-data": "workspace:*",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mysql2": "^3.11.5"
