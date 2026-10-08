@@ -9,8 +9,6 @@ class App {
     public async start(): Promise<void> {
         const server = express();
 
-        //server.use(cors());
-
         await dal.init();
 
         server.use(express.json());

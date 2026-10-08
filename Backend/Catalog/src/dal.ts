@@ -26,13 +26,14 @@ class Dal {
                 image_url VARCHAR(500) NULL,
                 seller_id INT NOT NULL,
                 seller_email VARCHAR(255) NOT NULL,
+                status VARCHAR(10) NOT NULL DEFAULT 'available',
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 INDEX idx_products_seller (seller_id),
                 INDEX idx_products_category (category)
             )
         `);
-        // Added after the table already existed for some deployments; MySQL has no portable
+        // Migration for deployments whose table predates the status column; MySQL has no portable
         // "ADD COLUMN IF NOT EXISTS" (that's MariaDB), so the duplicate-column error is swallowed instead.
         try {
             await this.pool.query(`

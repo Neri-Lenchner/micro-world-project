@@ -12,8 +12,6 @@ class App {
     public async start(): Promise<void> {
         const server = express();
 
-        //server.use(cors());
-
         await dal.init();
         await messaging.connect(appConfig.rabbitmqUrl);
         await startOrderEventsConsumer();
